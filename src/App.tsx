@@ -1,0 +1,29 @@
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Collections from './components/Collections'
+import ProductShowcase from './components/ProductShowcase'
+import ArtisanStory from './components/ArtisanStory'
+import WhyChooseUs from './components/WhyChooseUs'
+import Testimonials from './components/Testimonials'
+import Newsletter from './components/Newsletter'
+import Footer from './components/Footer'
+
+function App() {
+  return (
+    <div className="relative overflow-x-hidden bg-[#0d0d0d] text-[#F5F0E8]">
+      <Navbar />
+      <main>
+        <Hero />
+        <Collections />
+        <ProductShowcase />
+        <ArtisanStory />
+        <WhyChooseUs />
+        <Testimonials />
+        <Newsletter />
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+export default App

@@ -1,0 +1,1 @@
+- [VinayakArt Project](project_vinayakart.md) — Premium Maharashtrian sculpture site: React+TS+Tailwind+Framer Motion, saffron/ochre palette, 8 sections, builds clean

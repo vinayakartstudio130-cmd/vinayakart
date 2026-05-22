@@ -25,7 +25,8 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || '')
   .filter(Boolean);
 
 const localOrigins = ['http://localhost:5173', 'http://localhost:3000'];
-const configuredOrigins = isProduction ? clientOrigins : [...clientOrigins, ...localOrigins];
+const productionOrigins = ['https://*.vercel.app', ...clientOrigins];
+const configuredOrigins = isProduction ? productionOrigins : [...clientOrigins, ...localOrigins];
 const allowedOrigins = new Set(configuredOrigins.filter((origin) => !origin.includes('*')));
 const escapeRegex = (value) => value.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 const wildcardOrigins = configuredOrigins

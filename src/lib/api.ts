@@ -68,3 +68,25 @@ export async function apiRequest<T>(
     window.clearTimeout(timeout);
   }
 }
+
+export const getAdminToken = () => window.localStorage.getItem('vinayakart_admin_token');
+
+export const setAdminToken = (token: string) => {
+  window.localStorage.setItem('vinayakart_admin_token', token);
+};
+
+export const clearAdminToken = () => {
+  window.localStorage.removeItem('vinayakart_admin_token');
+};
+
+export function adminRequest<T>(path: string, options: ApiRequestOptions = {}) {
+  const token = getAdminToken();
+
+  return apiRequest<T>(path, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}

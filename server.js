@@ -1,10 +1,14 @@
 import 'dotenv/config';
 
+import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import Razorpay from 'razorpay';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const isProduction = NODE_ENV === 'production';
+const JWT_SECRET = process.env.JWT_SECRET || 'change-this-development-secret';
 
 const clientOrigins = (process.env.CLIENT_ORIGIN || '')
   .split(',')
@@ -21,6 +26,14 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || '')
 
 const localOrigins = ['http://localhost:5173', 'http://localhost:3000'];
 const allowedOrigins = new Set(isProduction ? clientOrigins : [...clientOrigins, ...localOrigins]);
+
+const razorpay =
+  process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET
+    ? new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET,
+      })
+    : null;
 
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
@@ -42,9 +55,175 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
+const productSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    material: { type: String, required: true, trim: true },
+    category: { type: String, required: true, trim: true, lowercase: true },
+    price: { type: Number, required: true, min: 1 },
+    currency: { type: String, default: 'INR' },
+    dimensions: { type: String, default: '' },
+    image: { type: String, required: true, trim: true },
+    badge: { type: String, default: '' },
+    badgeColor: { type: String, enum: ['gold', 'stone', 'red'], default: 'gold' },
+    description: { type: String, default: '' },
+    stock: { type: Number, default: 1, min: 0 },
+    isFeatured: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
+const enquirySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true, lowercase: true },
+    phone: { type: String, default: '' },
+    enquiry: { type: String, default: '' },
+    message: { type: String, required: true },
+    status: { type: String, enum: ['new', 'contacted', 'closed'], default: 'new' },
+  },
+  { timestamps: true },
+);
+
+const adminUserSchema = new mongoose.Schema(
+  {
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    passwordHash: { type: String, required: true },
+    name: { type: String, default: 'Admin' },
+  },
+  { timestamps: true },
+);
+
+const orderSchema = new mongoose.Schema(
+  {
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    customer: {
+      name: { type: String, required: true },
+      email: { type: String, required: true },
+      phone: { type: String, default: '' },
+    },
+    amount: { type: Number, required: true },
+    currency: { type: String, default: 'INR' },
+    status: {
+      type: String,
+      enum: ['created', 'paid', 'failed'],
+      default: 'created',
+    },
+    razorpayOrderId: { type: String, required: true },
+    razorpayPaymentId: { type: String, default: '' },
+    razorpaySignature: { type: String, default: '' },
+  },
+  { timestamps: true },
+);
+
+const Product = mongoose.model('Product', productSchema);
+const Enquiry = mongoose.model('Enquiry', enquirySchema);
+const AdminUser = mongoose.model('AdminUser', adminUserSchema);
+const Order = mongoose.model('Order', orderSchema);
+
+const seedProducts = [
+  {
+    name: 'Ganesha in Black Basalt',
+    slug: 'ganesha-in-black-basalt',
+    material: 'Black Basalt Stone',
+    price: 48000,
+    badge: 'Rare',
+    badgeColor: 'red',
+    category: 'stone',
+    image: 'https://images.unsplash.com/photo-1608099269227-82de5da1e4a8?w=600&q=80&fit=crop',
+    dimensions: '18" x 12" x 8"',
+    stock: 1,
+  },
+  {
+    name: 'Dancing Shiva Nataraja',
+    slug: 'dancing-shiva-nataraja',
+    material: 'Panchaloha Brass',
+    price: 72000,
+    badge: 'Bestseller',
+    badgeColor: 'gold',
+    category: 'brass',
+    image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&q=80&fit=crop',
+    dimensions: '24" x 14" x 6"',
+    stock: 1,
+  },
+  {
+    name: 'Vitthal of Pandharpur',
+    slug: 'vitthal-of-pandharpur',
+    material: 'Nashik Terracotta',
+    price: 28500,
+    badge: 'New',
+    badgeColor: 'gold',
+    category: 'terracotta',
+    image: 'https://images.unsplash.com/photo-1583425423885-d9c2cd0b1077?w=600&q=80&fit=crop',
+    dimensions: '16" x 9" x 7"',
+    stock: 2,
+  },
+];
+
 const getDbStatus = () => {
   const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
   return states[mongoose.connection.readyState] || 'unknown';
+};
+
+const slugify = (value) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const asyncHandler = (handler) => (req, res, next) =>
+  Promise.resolve(handler(req, res, next)).catch(next);
+
+const requireAdmin = asyncHandler(async (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    res.status(401).json({ error: 'Admin login required.' });
+    return;
+  }
+
+  try {
+    req.admin = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: 'Invalid or expired admin session.' });
+  }
+});
+
+const requireFields = (body, fields) => {
+  const missing = fields.filter((field) => !String(body[field] ?? '').trim());
+  if (missing.length > 0) {
+    const error = new Error(`Missing required fields: ${missing.join(', ')}`);
+    error.status = 400;
+    throw error;
+  }
+};
+
+const bootstrapData = async () => {
+  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+    console.warn('ADMIN_EMAIL or ADMIN_PASSWORD is not set. Admin login is disabled.');
+  } else {
+    const email = process.env.ADMIN_EMAIL.toLowerCase();
+    const existingAdmin = await AdminUser.findOne({ email });
+
+    if (!existingAdmin) {
+      const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
+      await AdminUser.create({
+        email,
+        passwordHash,
+        name: process.env.ADMIN_NAME || 'VinayakArt Admin',
+      });
+      console.log('Admin user created.');
+    }
+  }
+
+  if ((await Product.countDocuments()) === 0) {
+    await Product.insertMany(seedProducts);
+    console.log('Seed products created.');
+  }
 };
 
 const connectToMongo = async () => {
@@ -58,6 +237,7 @@ const connectToMongo = async () => {
       serverSelectionTimeoutMS: 5000,
     });
     console.log('MongoDB Atlas connected.');
+    await bootstrapData();
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
     if (isProduction) {
@@ -80,22 +260,286 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get('/api/config', (req, res) => {
+  res.json({
+    razorpayKeyId: process.env.RAZORPAY_KEY_ID || '',
+  });
+});
+
+app.get(
+  '/api/products',
+  asyncHandler(async (req, res) => {
+    const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
+    res.json({ products });
+  }),
+);
+
 app.get('/api', (req, res) => {
   res.json({ message: 'Vinayakart API is running.' });
 });
 
-app.post('/api/enquiries', (req, res) => {
-  const { name, email, message } = req.body;
+app.post(
+  '/api/enquiries',
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['name', 'email', 'message']);
 
-  if (!name?.trim() || !email?.trim() || !message?.trim()) {
-    res.status(400).json({ error: 'Name, email, and message are required.' });
-    return;
-  }
+    const enquiry = await Enquiry.create({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      enquiry: req.body.enquiry,
+      message: req.body.message,
+    });
 
-  res.status(202).json({
-    message: 'Enquiry received.',
-  });
-});
+    res.status(201).json({
+      message: 'Enquiry received.',
+      enquiryId: enquiry._id,
+    });
+  }),
+);
+
+app.post(
+  '/api/payments/create-order',
+  asyncHandler(async (req, res) => {
+    if (!razorpay) {
+      res.status(503).json({ error: 'Payment gateway is not configured.' });
+      return;
+    }
+
+    requireFields(req.body, ['productId', 'name', 'email']);
+
+    const product = await Product.findOne({ _id: req.body.productId, isActive: true });
+    if (!product || product.stock <= 0) {
+      res.status(404).json({ error: 'Product is unavailable.' });
+      return;
+    }
+
+    const amountPaise = product.price * 100;
+    const razorpayOrder = await razorpay.orders.create({
+      amount: amountPaise,
+      currency: product.currency,
+      receipt: `order_${Date.now()}`,
+      notes: {
+        productId: String(product._id),
+        productName: product.name,
+      },
+    });
+
+    const order = await Order.create({
+      product: product._id,
+      customer: {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone || '',
+      },
+      amount: product.price,
+      currency: product.currency,
+      razorpayOrderId: razorpayOrder.id,
+    });
+
+    res.status(201).json({
+      orderId: order._id,
+      razorpayOrderId: razorpayOrder.id,
+      amount: amountPaise,
+      currency: product.currency,
+      product: {
+        name: product.name,
+        description: product.material,
+      },
+    });
+  }),
+);
+
+app.post(
+  '/api/payments/verify',
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, [
+      'orderId',
+      'razorpay_order_id',
+      'razorpay_payment_id',
+      'razorpay_signature',
+    ]);
+
+    const expectedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '')
+      .update(`${req.body.razorpay_order_id}|${req.body.razorpay_payment_id}`)
+      .digest('hex');
+
+    if (expectedSignature !== req.body.razorpay_signature) {
+      res.status(400).json({ error: 'Payment verification failed.' });
+      return;
+    }
+
+    const order = await Order.findOneAndUpdate(
+      { _id: req.body.orderId, razorpayOrderId: req.body.razorpay_order_id },
+      {
+        status: 'paid',
+        razorpayPaymentId: req.body.razorpay_payment_id,
+        razorpaySignature: req.body.razorpay_signature,
+      },
+      { new: true },
+    );
+
+    if (!order) {
+      res.status(404).json({ error: 'Order not found.' });
+      return;
+    }
+
+    await Product.findByIdAndUpdate(order.product, { $inc: { stock: -1 } });
+    res.json({ message: 'Payment verified.', orderId: order._id });
+  }),
+);
+
+app.post(
+  '/api/admin/login',
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['email', 'password']);
+
+    const admin = await AdminUser.findOne({ email: req.body.email.toLowerCase() });
+    const isValid = admin && (await bcrypt.compare(req.body.password, admin.passwordHash));
+
+    if (!isValid) {
+      res.status(401).json({ error: 'Invalid admin credentials.' });
+      return;
+    }
+
+    const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name }, JWT_SECRET, {
+      expiresIn: '12h',
+    });
+
+    res.json({
+      token,
+      admin: {
+        email: admin.email,
+        name: admin.name,
+      },
+    });
+  }),
+);
+
+app.get(
+  '/api/admin/summary',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const [products, enquiries, newEnquiries, paidOrders] = await Promise.all([
+      Product.countDocuments(),
+      Enquiry.countDocuments(),
+      Enquiry.countDocuments({ status: 'new' }),
+      Order.countDocuments({ status: 'paid' }),
+    ]);
+
+    res.json({ products, enquiries, newEnquiries, paidOrders });
+  }),
+);
+
+app.get(
+  '/api/admin/products',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json({ products });
+  }),
+);
+
+app.post(
+  '/api/admin/products',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['name', 'material', 'category', 'price', 'image']);
+
+    const product = await Product.create({
+      ...req.body,
+      slug: req.body.slug ? slugify(req.body.slug) : slugify(req.body.name),
+      price: Number(req.body.price),
+      stock: Number(req.body.stock ?? 1),
+    });
+
+    res.status(201).json({ product });
+  }),
+);
+
+app.put(
+  '/api/admin/products/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const update = {
+      ...req.body,
+      slug: req.body.slug ? slugify(req.body.slug) : undefined,
+      price: req.body.price === undefined ? undefined : Number(req.body.price),
+      stock: req.body.stock === undefined ? undefined : Number(req.body.stock),
+    };
+
+    Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);
+
+    const product = await Product.findByIdAndUpdate(req.params.id, update, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!product) {
+      res.status(404).json({ error: 'Product not found.' });
+      return;
+    }
+
+    res.json({ product });
+  }),
+);
+
+app.delete(
+  '/api/admin/products/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true },
+    );
+
+    if (!product) {
+      res.status(404).json({ error: 'Product not found.' });
+      return;
+    }
+
+    res.json({ product });
+  }),
+);
+
+app.get(
+  '/api/admin/enquiries',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const enquiries = await Enquiry.find().sort({ createdAt: -1 });
+    res.json({ enquiries });
+  }),
+);
+
+app.put(
+  '/api/admin/enquiries/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const enquiry = await Enquiry.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true, runValidators: true },
+    );
+
+    if (!enquiry) {
+      res.status(404).json({ error: 'Enquiry not found.' });
+      return;
+    }
+
+    res.json({ enquiry });
+  }),
+);
+
+app.get(
+  '/api/admin/orders',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const orders = await Order.find().populate('product').sort({ createdAt: -1 });
+    res.json({ orders });
+  }),
+);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ error: 'API route not found' });

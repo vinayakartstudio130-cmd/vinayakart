@@ -7,8 +7,13 @@ import WhyChooseUs from './components/WhyChooseUs'
 import Testimonials from './components/Testimonials'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
+import AdminPanel from './pages/AdminPanel'
 
 function App() {
+  if (window.location.pathname.startsWith('/admin')) {
+    return <AdminPanel />
+  }
+
   return (
     <div className="relative overflow-x-hidden bg-[#0d0d0d] text-[#F5F0E8]">
       <Navbar />

@@ -25,7 +25,15 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || '')
   .filter(Boolean);
 
 const localOrigins = ['http://localhost:5173', 'http://localhost:3000'];
-const allowedOrigins = new Set(isProduction ? clientOrigins : [...clientOrigins, ...localOrigins]);
+const configuredOrigins = isProduction ? clientOrigins : [...clientOrigins, ...localOrigins];
+const allowedOrigins = new Set(configuredOrigins.filter((origin) => !origin.includes('*')));
+const escapeRegex = (value) => value.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+const wildcardOrigins = configuredOrigins
+  .filter((origin) => origin.includes('*'))
+  .map((origin) => new RegExp(`^${origin.split('*').map(escapeRegex).join('.*')}$`));
+
+const isAllowedOrigin = (origin) =>
+  allowedOrigins.has(origin) || wildcardOrigins.some((pattern) => pattern.test(origin));
 
 const razorpay =
   process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET
@@ -41,7 +49,7 @@ app.disable('x-powered-by');
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) {
+      if (!origin || isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }

@@ -2,7 +2,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Collections from './components/Collections'
 import ProductShowcase from './components/ProductShowcase'
-import ArtisanStory from './components/ArtisanStory'
+
 import WhyChooseUs from './components/WhyChooseUs'
 import Testimonials from './components/Testimonials'
 import Newsletter from './components/Newsletter'
@@ -21,7 +21,7 @@ function App() {
         <Hero />
         <Collections />
         <ProductShowcase />
-        <ArtisanStory />
+
         <WhyChooseUs />
         <Testimonials />
         <Newsletter />

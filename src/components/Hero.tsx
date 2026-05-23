@@ -24,18 +24,19 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex flex-col overflow-hidden"
       aria-label="Hero section"
-      style={{ background: 'linear-gradient(135deg, #1CB8D2 0%, #17A5BE 50%, #1390A8 100%)' }}
+      style={{ background: '#0a0a0a' }}
     >
-      {/* Subtle geometric pattern overlay */}
+      {/* Gold texture background */}
       <div
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `radial-gradient(circle at 20% 50%, #FFFFFF 1px, transparent 1px),
-                            radial-gradient(circle at 80% 20%, #FFFFFF 1px, transparent 1px),
-                            radial-gradient(circle at 60% 80%, #FFFFFF 1px, transparent 1px)`,
-          backgroundSize: '60px 60px, 80px 80px, 100px 100px',
+          backgroundImage: 'url(/images/gold-bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       />
+      {/* Dark overlay to keep text readable */}
+      <div className="absolute inset-0 z-0" style={{ background: 'rgba(10,8,4,0.55)' }} />
 
       {/* Wave shape at bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-10" style={{ lineHeight: 0 }}>
@@ -53,7 +54,7 @@ export default function Hero() {
       >
         {/* Overline label */}
         <motion.div variants={itemVariants} className="mb-6 flex justify-center">
-          <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase text-white/80 px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)' }}>
+          <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase text-white px-4 py-1.5 rounded-full" style={{ background: 'rgba(28,184,210,0.85)', border: '1px solid rgba(28,184,210,0.5)' }}>
             Maharashtra's Finest
           </span>
         </motion.div>

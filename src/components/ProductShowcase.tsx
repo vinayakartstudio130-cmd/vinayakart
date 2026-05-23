@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+﻿import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { AlertCircle, CheckCircle, Eye, Heart, Loader2, ShoppingBag, X } from 'lucide-react'
 import { apiRequest } from '../lib/api'
@@ -154,7 +154,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         <h3
           className="font-display font-semibold text-white mb-3 leading-snug group-hover:text-[#1CB8D2] transition-colors duration-300"
           style={{
-            fontFamily: 'Cormorant Garamond, serif',
+            fontFamily: 'Montserrat Alternates, sans-serif',
             fontSize: 'clamp(1.0rem, 1.8vw, 1.2rem)',
           }}
         >
@@ -163,7 +163,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         <div className="flex items-center justify-between gap-3">
           <span
             className="font-display font-bold cyan-text"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem' }}
+            style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.25rem' }}
           >
             {currency.format(product.price)}
           </span>
@@ -307,7 +307,7 @@ export default function ProductShowcase() {
           <h2
             className="font-display font-light text-white leading-[1.1]"
             style={{
-              fontFamily: 'Cormorant Garamond, serif',
+              fontFamily: 'Montserrat Alternates, sans-serif',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
             }}
           >
@@ -402,7 +402,7 @@ export default function ProductShowcase() {
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <p className="section-label mb-3">Secure Checkout</p>
-                <h3 className="font-display text-3xl text-white" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{selectedProduct.name}</h3>
+                <h3 className="font-display text-3xl text-white" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>{selectedProduct.name}</h3>
                 <p className="mt-1 font-bold text-[#1CB8D2]">{currency.format(selectedProduct.price)}</p>
               </div>
               <button type="button" onClick={() => setSelectedProduct(null)} aria-label="Close checkout" className="text-white/50 hover:text-white transition-colors">
@@ -445,3 +445,4 @@ export default function ProductShowcase() {
     </section>
   )
 }
+

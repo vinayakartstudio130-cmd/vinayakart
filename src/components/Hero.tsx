@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
 const stats = [
   { number: '12,000+', label: 'Collectors Worldwide' },
   { number: '500+', label: 'Unique Sculptures' },
   { number: '25 Yrs', label: 'Heritage Craft' },
-  { number: '4.9 ★', label: 'Collector Rating' },
+  { number: '4.9 â˜…', label: 'Collector Rating' },
 ]
 
 const containerVariants = {
@@ -63,7 +63,7 @@ export default function Hero() {
           variants={itemVariants}
           className="font-display font-light leading-[1.08] tracking-tight text-white mb-6"
           style={{
-            fontFamily: 'Cormorant Garamond, serif',
+            fontFamily: 'Montserrat Alternates, sans-serif',
             fontSize: 'clamp(2.8rem, 7vw, 6.5rem)',
           }}
         >
@@ -80,7 +80,7 @@ export default function Hero() {
           className="font-sans font-light text-white/80 max-w-xl mb-10 leading-relaxed"
           style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.0625rem)' }}
         >
-          Collector-grade Maharashtrian sculptures in stone, brass, terracotta and wood —
+          Collector-grade Maharashtrian sculptures in stone, brass, terracotta and wood â€”
           each piece bearing the soul of a master artisan.
         </motion.p>
 
@@ -117,7 +117,7 @@ export default function Hero() {
               <span
                 className="font-display font-bold mb-1 text-[#1CB8D2]"
                 style={{
-                  fontFamily: 'Cormorant Garamond, serif',
+                  fontFamily: 'Montserrat Alternates, sans-serif',
                   fontSize: 'clamp(1.4rem, 3vw, 2rem)',
                 }}
               >
@@ -133,3 +133,4 @@ export default function Hero() {
     </section>
   )
 }
+

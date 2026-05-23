@@ -1,4 +1,4 @@
-import { useState, useRef, FormEvent } from 'react'
+﻿import { useState, useRef, FormEvent } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, Loader2, MessageCircle } from 'lucide-react'
 import { apiRequest } from '../lib/api'
@@ -90,7 +90,7 @@ export default function Newsletter() {
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.7 }}
       >
-        {/* Left panel — dark */}
+        {/* Left panel â€” dark */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
           style={{ background: '#162540' }}
@@ -98,14 +98,14 @@ export default function Newsletter() {
           <div className="section-label mb-6">Speak with a Curator</div>
           <h2
             className="font-display font-light text-white leading-[1.1] mb-5"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2rem, 4vw, 3rem)' }}
+            style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4vw, 3rem)' }}
           >
             Commission Your{' '}
             <span className="font-semibold" style={{ color: '#1CB8D2' }}>Piece</span>
           </h2>
           <p className="font-sans leading-relaxed mb-8 max-w-sm" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.55)' }}>
             Whether you seek a bespoke commission, a specific sculpture, or simply expert guidance
-            on building your collection — our curators are here.
+            on building your collection â€” our curators are here.
           </p>
 
           <div className="space-y-3 mb-8">
@@ -132,7 +132,7 @@ export default function Newsletter() {
           </p>
         </div>
 
-        {/* Right panel — cyan */}
+        {/* Right panel â€” cyan */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
           style={{ background: '#1CB8D2' }}
@@ -144,7 +144,7 @@ export default function Newsletter() {
               className="text-center py-8"
             >
               <CheckCircle size={48} className="mx-auto mb-5 text-white" />
-              <h3 className="font-display text-3xl text-white mb-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+              <h3 className="font-display text-3xl text-white mb-2" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
                 Message Received
               </h3>
               <p className="font-sans text-sm text-white/75">
@@ -153,7 +153,7 @@ export default function Newsletter() {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <h3 className="font-display font-semibold text-white text-2xl mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+              <h3 className="font-display font-semibold text-white text-2xl mb-6" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
                 Send an Enquiry
               </h3>
 
@@ -238,7 +238,7 @@ export default function Newsletter() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   rows={4}
-                  placeholder="Your message — describe what you're looking for..."
+                  placeholder="Your message â€” describe what you're looking for..."
                   className="w-full px-4 py-3 font-sans text-sm outline-none resize-none rounded-lg"
                   style={{
                     background: 'rgba(255,255,255,0.2)',
@@ -264,3 +264,4 @@ export default function Newsletter() {
     </section>
   )
 }
+

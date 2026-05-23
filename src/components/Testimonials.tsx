@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+﻿import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -26,7 +26,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 2,
-    quote: "VinayakArt's curation standards and provenance documentation are the best in the market — comparable to any international auction house.",
+    quote: "VinayakArt's curation standards and provenance documentation are the best in the market â€” comparable to any international auction house.",
     name: 'Arjun Mehta',
     role: 'Gallery Director',
     location: 'Singapore',
@@ -74,7 +74,7 @@ export default function Testimonials() {
           </div>
           <h2
             className="font-display font-light text-white leading-[1.1]"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
+            style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
           >
             Words of the <span className="font-semibold" style={{ color: '#1CB8D2' }}>Discerning</span>
           </h2>
@@ -142,7 +142,7 @@ export default function Testimonials() {
 
             <blockquote
               className="font-display font-light text-white/90 leading-relaxed mb-6"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(1.1rem, 2vw, 1.35rem)' }}
+              style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(1.1rem, 2vw, 1.35rem)' }}
             >
               "{testimonials[active].quote}"
             </blockquote>
@@ -151,7 +151,7 @@ export default function Testimonials() {
               <span className="font-sans text-[11px] tracking-[0.1em] uppercase text-white/40">
                 {testimonials[active].location}
               </span>
-              <span className="text-white/20">·</span>
+              <span className="text-white/20">Â·</span>
               <span
                 className="font-sans text-[11px] tracking-[0.1em] uppercase px-2 py-0.5 rounded-full"
                 style={{ background: 'rgba(28,184,210,0.15)', color: '#1CB8D2' }}
@@ -198,3 +198,4 @@ export default function Testimonials() {
     </section>
   )
 }
+

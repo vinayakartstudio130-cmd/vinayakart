@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Menu, MessageCircle, ChevronRight } from 'lucide-react'
 
@@ -49,14 +49,14 @@ export default function Navbar() {
                 className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[#1CB8D2]/10"
                 style={{ border: '2px solid #1CB8D2' }}
               >
-                <span className="font-display font-bold text-lg leading-none" style={{ color: '#1CB8D2', fontFamily: 'Cormorant Garamond, serif' }}>
+                <span className="font-display font-bold text-lg leading-none" style={{ color: '#1CB8D2', fontFamily: 'Montserrat Alternates, sans-serif' }}>
                   V
                 </span>
               </div>
               <div className="flex flex-col leading-none">
                 <span
                   className="font-display font-semibold text-xl tracking-wide text-white group-hover:text-[#1CB8D2] transition-colors duration-300"
-                  style={{ fontFamily: 'Cormorant Garamond, serif' }}
+                  style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}
                 >
                   VinayakArt
                 </span>
@@ -162,7 +162,7 @@ export default function Navbar() {
               style={{ background: '#162540', borderLeft: '2px solid #1CB8D2' }}
             >
               <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(28,184,210,0.15)]">
-                <span className="font-display text-xl text-white" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                <span className="font-display text-xl text-white" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
                   VinayakArt
                 </span>
                 <button
@@ -209,3 +209,4 @@ export default function Navbar() {
     </>
   )
 }
+

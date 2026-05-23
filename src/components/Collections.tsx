@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+﻿import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
@@ -89,7 +89,7 @@ function CollectionCard({ collection }: { collection: Collection }) {
 
       {/* Card content */}
       <div className="p-5">
-        <h3 className="font-display text-xl font-semibold mb-0.5 group-hover:text-[#1CB8D2] transition-colors duration-300" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#162540' }}>
+        <h3 className="font-display text-xl font-semibold mb-0.5 group-hover:text-[#1CB8D2] transition-colors duration-300" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#162540' }}>
           {collection.title}
         </h3>
         <p className="font-sans text-[11px] tracking-[0.12em] uppercase mb-3" style={{ color: 'rgba(22,37,64,0.5)' }}>
@@ -134,7 +134,7 @@ export default function Collections() {
             <h2
               className="font-display font-light leading-[1.1]"
               style={{
-                fontFamily: 'Cormorant Garamond, serif',
+                fontFamily: 'Montserrat Alternates, sans-serif',
                 fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
                 color: '#162540',
               }}
@@ -170,3 +170,4 @@ export default function Collections() {
     </section>
   )
 }
+

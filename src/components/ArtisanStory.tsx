@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+﻿import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { Award, Users, Gem } from 'lucide-react'
 
@@ -40,7 +40,7 @@ export default function ArtisanStory() {
       <div className="section-container" ref={sectionRef}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-          {/* Left — image */}
+          {/* Left â€” image */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: -50 }}
@@ -75,16 +75,16 @@ export default function ArtisanStory() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.5 }}
             >
-              <p className="font-display italic text-white/85 mb-3 leading-relaxed" style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1rem' }}>
-                "Every chisel mark is a prayer. We do not make idols — we reveal them."
+              <p className="font-display italic text-white/85 mb-3 leading-relaxed" style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1rem' }}>
+                "Every chisel mark is a prayer. We do not make idols â€” we reveal them."
               </p>
               <p className="font-sans text-[10px] tracking-[0.18em] uppercase" style={{ color: '#1CB8D2' }}>
-                — Ganesh Shilpkar, Nashik
+                â€” Ganesh Shilpkar, Nashik
               </p>
             </motion.div>
           </motion.div>
 
-          {/* Right — text content */}
+          {/* Right â€” text content */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -94,7 +94,7 @@ export default function ArtisanStory() {
 
             <h2
               className="font-display font-light text-white leading-[1.1] mb-6"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2.0rem, 4vw, 3.2rem)' }}
+              style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2.0rem, 4vw, 3.2rem)' }}
             >
               Crafted by{' '}
               <span className="font-semibold" style={{ color: '#1CB8D2' }}>Master Artisans</span>
@@ -107,7 +107,7 @@ export default function ArtisanStory() {
             </p>
 
             <p className="font-sans leading-relaxed mb-10" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.45)' }}>
-              From the Shilpkar families of Nashik to the brass-casting guilds of Kolhapur —
+              From the Shilpkar families of Nashik to the brass-casting guilds of Kolhapur â€”
               our artisans carry techniques passed down across 12 to 20 generations,
               untouched by industrialisation.
             </p>
@@ -130,7 +130,7 @@ export default function ArtisanStory() {
                     <item.icon size={16} style={{ color: '#1CB8D2' }} />
                   </div>
                   <div>
-                    <h4 className="font-display font-semibold text-white mb-1" style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem' }}>
+                    <h4 className="font-display font-semibold text-white mb-1" style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.1rem' }}>
                       {item.title}
                     </h4>
                     <p className="font-sans text-[0.8125rem] leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
@@ -146,3 +146,4 @@ export default function ArtisanStory() {
     </section>
   )
 }
+

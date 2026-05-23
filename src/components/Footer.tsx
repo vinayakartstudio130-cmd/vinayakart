@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUp, Instagram, Facebook, Youtube, Twitter } from 'lucide-react'
 
@@ -46,12 +46,12 @@ export default function Footer() {
                   className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{ border: '2px solid #1CB8D2' }}
                 >
-                  <span className="font-display font-bold text-lg leading-none" style={{ color: '#1CB8D2', fontFamily: 'Cormorant Garamond, serif' }}>
+                  <span className="font-display font-bold text-lg leading-none" style={{ color: '#1CB8D2', fontFamily: 'Montserrat Alternates, sans-serif' }}>
                     V
                   </span>
                 </div>
                 <div>
-                  <span className="font-display font-semibold text-xl text-white block" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                  <span className="font-display font-semibold text-xl text-white block" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
                     VinayakArt
                   </span>
                   <span className="font-sans text-[9px] tracking-[0.25em] uppercase" style={{ color: '#1CB8D2' }}>
@@ -61,7 +61,7 @@ export default function Footer() {
               </div>
 
               <p className="font-sans text-[0.8125rem] leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                Collector-grade Maharashtrian sculptures, brass works, and devotional art —
+                Collector-grade Maharashtrian sculptures, brass works, and devotional art â€”
                 sourced directly from master artisan families and delivered worldwide.
               </p>
 
@@ -156,3 +156,4 @@ export default function Footer() {
     </>
   )
 }
+

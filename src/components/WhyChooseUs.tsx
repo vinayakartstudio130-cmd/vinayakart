@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+﻿import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Shield, Truck, FileCheck, HeartHandshake, Microscope, RefreshCw } from 'lucide-react'
 
@@ -12,7 +12,7 @@ const trustCards: TrustCard[] = [
   {
     icon: Shield,
     title: 'Guaranteed Authenticity',
-    description: 'Each piece comes with a hand-signed provenance certificate and artisan biography — verifying its origin, material, and craft lineage.',
+    description: 'Each piece comes with a hand-signed provenance certificate and artisan biography â€” verifying its origin, material, and craft lineage.',
   },
   {
     icon: Microscope,
@@ -32,7 +32,7 @@ const trustCards: TrustCard[] = [
   {
     icon: HeartHandshake,
     title: 'Collector Concierge',
-    description: 'A dedicated relationship manager for every acquisition — from first enquiry to installation guidance.',
+    description: 'A dedicated relationship manager for every acquisition â€” from first enquiry to installation guidance.',
   },
   {
     icon: RefreshCw,
@@ -76,7 +76,7 @@ export default function WhyChooseUs() {
           <h2
             className="font-display font-light leading-[1.1] max-w-2xl mx-auto"
             style={{
-              fontFamily: 'Cormorant Garamond, serif',
+              fontFamily: 'Montserrat Alternates, sans-serif',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
               color: '#162540',
             }}
@@ -86,7 +86,7 @@ export default function WhyChooseUs() {
           </h2>
         </motion.div>
 
-        {/* Cards 3×2 grid */}
+        {/* Cards 3Ã—2 grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6"
           variants={containerVariants}
@@ -115,7 +115,7 @@ export default function WhyChooseUs() {
 
               <h3
                 className="font-display font-semibold mb-3 group-hover:text-[#1CB8D2] transition-colors duration-300"
-                style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.2rem', color: '#162540' }}
+                style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.2rem', color: '#162540' }}
               >
                 {card.title}
               </h3>
@@ -140,3 +140,4 @@ export default function WhyChooseUs() {
     </section>
   )
 }
+

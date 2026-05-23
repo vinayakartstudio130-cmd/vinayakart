@@ -15,7 +15,7 @@ function App() {
   }
 
   return (
-    <div className="relative overflow-x-hidden bg-[#0d0d0d] text-[#F5F0E8]">
+    <div className="relative overflow-x-hidden" style={{ background: '#162540' }}>
       <Navbar />
       <main>
         <Hero />

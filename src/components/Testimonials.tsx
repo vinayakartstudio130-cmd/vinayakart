@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Testimonial {
   id: number
@@ -16,89 +16,55 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    quote: "When the Ganesha arrived, I was moved to tears. The craftsmanship surpasses anything I have seen in twenty years of collecting Indian antiquities. VinayakArt delivered not just a sculpture — they delivered a living tradition.",
+    quote: "When the Ganesha arrived, I was moved to tears. The craftsmanship surpasses anything I have seen in twenty years of collecting Indian antiquities.",
     name: 'Priya Raghunathan',
     role: 'Private Collector',
-    location: 'Mumbai, Maharashtra',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&q=80',
+    location: 'Mumbai',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80',
     rating: 5,
     piece: 'Black Basalt Ganesha',
   },
   {
     id: 2,
-    quote: "I've sourced Maharashtrian art for my gallery in Singapore for a decade. VinayakArt's curation standards and provenance documentation are the best in the market — comparable to any international auction house.",
+    quote: "VinayakArt's curation standards and provenance documentation are the best in the market — comparable to any international auction house.",
     name: 'Arjun Mehta',
     role: 'Gallery Director',
     location: 'Singapore',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&q=80',
     rating: 5,
     piece: 'Panchaloha Nataraja',
   },
   {
     id: 3,
-    quote: "The Peshwa-era relief panel they found for me had been in one artisan family for four generations. The care VinayakArt took in acquisition, documentation, and delivery was extraordinary. This is a truly special company.",
+    quote: "The care VinayakArt took in acquisition, documentation, and delivery was extraordinary. This is a truly special company.",
     name: 'Dr Sunita Desai',
-    role: 'Art Historian & Curator',
-    location: 'Pune, Maharashtra',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&q=80',
+    role: 'Art Historian',
+    location: 'Pune',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&q=80',
     rating: 5,
-    piece: 'Peshwa-Era Stone Relief',
-  },
-  {
-    id: 4,
-    quote: "My commission for a custom Vitthal idol for our family temple was handled with patience, deep knowledge, and genuine reverence. The artisan communicated throughout the process. I cannot recommend them highly enough.",
-    name: 'Vishwas Kulkarni',
-    role: 'Temple Trust Chairman',
-    location: 'Kolhapur, Maharashtra',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&q=80',
-    rating: 5,
-    piece: 'Commissioned Vitthal Idol',
+    piece: 'Peshwa-Era Relief',
   },
 ]
 
 export default function Testimonials() {
-  const [current, setCurrent] = useState(0)
-  const [direction, setDirection] = useState(1)
+  const [active, setActive] = useState(1)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
-  const goTo = (index: number) => {
-    setDirection(index > current ? 1 : -1)
-    setCurrent(index)
-  }
-
-  const prev = () => goTo(current === 0 ? testimonials.length - 1 : current - 1)
-  const next = () => goTo(current === testimonials.length - 1 ? 0 : current + 1)
-
-  const slideVariants = {
-    enter: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? 60 : -60,
-    }),
-    center: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
-    },
-    exit: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? -60 : 60,
-      transition: { duration: 0.4 },
-    }),
-  }
-
-  const t = testimonials[current]
+  const prev = () => setActive((a) => (a === 0 ? testimonials.length - 1 : a - 1))
+  const next = () => setActive((a) => (a === testimonials.length - 1 ? 0 : a + 1))
 
   return (
     <section
       id="testimonials"
-      className="py-20 md:py-28 bg-[#0d0d0d] overflow-hidden"
+      className="py-20 md:py-28 overflow-hidden"
+      style={{ background: '#162540' }}
       aria-label="Client Testimonials"
     >
       <div className="section-container" ref={ref}>
-        {/* Section header */}
+        {/* Header */}
         <motion.div
-          className="text-center mb-14 md:mb-20"
+          className="text-center mb-14 md:mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -107,146 +73,124 @@ export default function Testimonials() {
             <span className="section-label">From Our Collectors</span>
           </div>
           <h2
-            className="font-display font-light text-[#F5F0E8] leading-[1.1]"
-            style={{
-              fontFamily: 'Cormorant Garamond, serif',
-              fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
-            }}
+            className="font-display font-light text-white leading-[1.1]"
+            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
           >
-            Words of the <em style={{ color: '#C9A84C' }}>Discerning</em>
+            Words of the <span className="font-semibold" style={{ color: '#1CB8D2' }}>Discerning</span>
           </h2>
         </motion.div>
 
-        {/* Testimonial card */}
+        {/* 3 Circular avatars */}
         <motion.div
-          className="max-w-3xl mx-auto relative"
+          className="flex items-end justify-center gap-6 md:gap-10 mb-12"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          {testimonials.map((t, i) => (
+            <button
+              key={t.id}
+              onClick={() => setActive(i)}
+              className="flex flex-col items-center gap-3 transition-all duration-400 focus:outline-none"
+              style={{ transform: i === active ? 'scale(1.1)' : 'scale(0.9)', opacity: i === active ? 1 : 0.55 }}
+              aria-label={`View testimonial from ${t.name}`}
+            >
+              <div
+                className="relative rounded-full overflow-hidden transition-all duration-300"
+                style={{
+                  width: i === active ? '96px' : '72px',
+                  height: i === active ? '96px' : '72px',
+                  border: i === active ? '3px solid #1CB8D2' : '2px solid rgba(28,184,210,0.3)',
+                  boxShadow: i === active ? '0 0 0 4px rgba(28,184,210,0.2)' : 'none',
+                }}
+              >
+                <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="text-center">
+                <p className="font-sans text-[12px] font-semibold tracking-wide" style={{ color: i === active ? '#FFFFFF' : 'rgba(255,255,255,0.45)' }}>
+                  {t.name}
+                </p>
+                <p className="font-sans text-[10px] tracking-[0.1em] uppercase" style={{ color: i === active ? '#1CB8D2' : 'rgba(28,184,210,0.4)' }}>
+                  {t.role}
+                </p>
+              </div>
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Active testimonial card */}
+        <motion.div
+          className="max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
         >
-          {/* Decorative quote mark */}
-          <div className="flex justify-center mb-8">
-            <Quote
-              size={40}
-              style={{ color: 'rgba(201,168,76,0.25)', fill: 'rgba(201,168,76,0.08)' }}
-            />
-          </div>
-
-          {/* Card */}
           <div
-            className="relative overflow-hidden p-8 md:p-12"
+            className="p-8 md:p-10 rounded-xl text-center"
             style={{
-              background: '#141210',
-              border: '1px solid rgba(201,168,76,0.12)',
+              background: '#1D3050',
+              border: '2px solid rgba(28,184,210,0.25)',
+              borderTop: '4px solid #1CB8D2',
             }}
           >
-            {/* Gold top line */}
-            <div className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, #F0D080, #C9A84C, transparent)' }}
-            />
-
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={t.id}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-              >
-                {/* Stars */}
-                <div className="flex items-center gap-1 mb-6 justify-center">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} size={14} style={{ color: '#C9A84C', fill: '#C9A84C' }} />
-                  ))}
-                </div>
-
-                {/* Quote text */}
-                <blockquote
-                  className="font-display font-light text-[#F5F0E8]/85 text-center leading-relaxed mb-8"
-                  style={{
-                    fontFamily: 'Cormorant Garamond, serif',
-                    fontSize: 'clamp(1.1rem, 2.2vw, 1.4rem)',
-                  }}
-                >
-                  "{t.quote}"
-                </blockquote>
-
-                {/* Divider */}
-                <div className="divider-gold mb-6" />
-
-                {/* Author info */}
-                <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                    style={{ border: '1.5px solid rgba(201,168,76,0.4)' }}
-                  />
-                  <div className="text-center md:text-left">
-                    <p
-                      className="font-display font-medium text-[#F5F0E8]"
-                      style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem' }}
-                    >
-                      {t.name}
-                    </p>
-                    <p className="font-sans text-[11px] tracking-[0.12em] text-[#F5F0E8]/40">
-                      {t.role} &mdash; {t.location}
-                    </p>
-                  </div>
-                  <div
-                    className="md:ml-4 px-3 py-1 hidden md:block"
-                    style={{
-                      background: 'rgba(201,168,76,0.08)',
-                      border: '1px solid rgba(201,168,76,0.2)',
-                    }}
-                  >
-                    <p className="font-sans text-[9px] tracking-[0.18em] uppercase text-[#C9A84C]">
-                      {t.piece}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-6 mt-8">
-            <button
-              onClick={prev}
-              className="w-10 h-10 flex items-center justify-center text-[#F5F0E8]/50 hover:text-[#C9A84C] transition-colors"
-              style={{ border: '1px solid rgba(201,168,76,0.2)' }}
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            {/* Dots */}
-            <div className="flex items-center gap-2.5">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                  className="transition-all duration-300"
-                  style={{
-                    width: i === current ? '20px' : '6px',
-                    height: '2px',
-                    background: i === current
-                      ? 'linear-gradient(90deg, #C9A84C, #F0D080)'
-                      : 'rgba(201,168,76,0.25)',
-                  }}
-                />
+            {/* Stars */}
+            <div className="flex items-center justify-center gap-1 mb-5">
+              {Array.from({ length: testimonials[active].rating }).map((_, i) => (
+                <Star key={i} size={14} style={{ color: '#1CB8D2', fill: '#1CB8D2' }} />
               ))}
             </div>
 
+            <blockquote
+              className="font-display font-light text-white/90 leading-relaxed mb-6"
+              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 'clamp(1.1rem, 2vw, 1.35rem)' }}
+            >
+              "{testimonials[active].quote}"
+            </blockquote>
+
+            <div className="flex items-center justify-center gap-2">
+              <span className="font-sans text-[11px] tracking-[0.1em] uppercase text-white/40">
+                {testimonials[active].location}
+              </span>
+              <span className="text-white/20">·</span>
+              <span
+                className="font-sans text-[11px] tracking-[0.1em] uppercase px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(28,184,210,0.15)', color: '#1CB8D2' }}
+              >
+                {testimonials[active].piece}
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <button
+              onClick={prev}
+              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#1CB8D2] transition-colors rounded-full border border-white/10 hover:border-[#1CB8D2]/50"
+              aria-label="Previous"
+            >
+              <ChevronLeft size={15} />
+            </button>
+            <div className="flex gap-2">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className="transition-all duration-300 rounded-full"
+                  style={{
+                    width: i === active ? '20px' : '6px',
+                    height: '6px',
+                    background: i === active ? '#1CB8D2' : 'rgba(28,184,210,0.25)',
+                  }}
+                  aria-label={`Go to ${i + 1}`}
+                />
+              ))}
+            </div>
             <button
               onClick={next}
-              className="w-10 h-10 flex items-center justify-center text-[#F5F0E8]/50 hover:text-[#C9A84C] transition-colors"
-              style={{ border: '1px solid rgba(201,168,76,0.2)' }}
-              aria-label="Next testimonial"
+              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#1CB8D2] transition-colors rounded-full border border-white/10 hover:border-[#1CB8D2]/50"
+              aria-label="Next"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={15} />
             </button>
           </div>
         </motion.div>

@@ -51,16 +51,16 @@ const filters = ['All', 'Stone', 'Brass', 'Terracotta', 'Wood']
 
 const badgeStyles: Record<string, React.CSSProperties> = {
   gold: {
-    background: 'linear-gradient(135deg, #C9A84C, #F0D080)',
-    color: '#0a0a0a',
+    background: '#1CB8D2',
+    color: '#FFFFFF',
   },
   red: {
-    background: 'rgba(180, 40, 40, 0.85)',
-    color: '#F5F0E8',
+    background: 'rgba(220, 60, 60, 0.9)',
+    color: '#FFFFFF',
   },
   stone: {
-    background: 'rgba(100, 90, 80, 0.6)',
-    color: '#F5F0E8',
+    background: 'rgba(80, 100, 120, 0.85)',
+    color: '#FFFFFF',
   },
 }
 
@@ -94,10 +94,10 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4 }}
-      className="group relative overflow-hidden card-lift"
+      className="group relative overflow-hidden card-lift rounded-xl"
       style={{
-        background: '#141210',
-        border: '1px solid rgba(201,168,76,0.08)',
+        background: '#1D3050',
+        border: '1px solid rgba(28,184,210,0.12)',
       }}
     >
       <div className="relative overflow-hidden aspect-[4/5]">
@@ -108,12 +108,12 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
           loading="lazy"
           style={{ filter: 'brightness(0.8) contrast(1.05)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141210] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1D3050] via-transparent to-transparent" />
 
         {product.badge && (
           <div className="absolute top-3 left-3 z-10">
             <span
-              className="font-sans text-[9px] font-semibold tracking-[0.2em] uppercase px-2.5 py-1"
+              className="font-sans text-[9px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
               style={badgeStyles[product.badgeColor]}
             >
               {product.badge}
@@ -123,24 +123,24 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 
         <button
           onClick={() => setWishlisted(!wishlisted)}
-          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100"
-          style={{ background: 'rgba(10,10,10,0.7)', border: '1px solid rgba(201,168,76,0.2)' }}
+          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 rounded-full"
+          style={{ background: 'rgba(22,37,64,0.8)', border: '1px solid rgba(28,184,210,0.3)' }}
           aria-label="Add to wishlist"
         >
           <Heart
             size={13}
-            className={wishlisted ? 'fill-[#C9A84C] text-[#C9A84C]' : 'text-[#F5F0E8]/60'}
+            className={wishlisted ? 'fill-[#1CB8D2] text-[#1CB8D2]' : 'text-white/60'}
           />
         </button>
 
         <div
-          className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out flex items-center justify-between px-4 py-3 z-10"
-          style={{ background: 'rgba(10,10,10,0.92)', borderTop: '1px solid rgba(201,168,76,0.15)' }}
+          className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex items-center justify-between px-4 py-3 z-10"
+          style={{ background: 'rgba(22,37,64,0.95)', borderTop: '1px solid rgba(28,184,210,0.2)' }}
         >
-          <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#C9A84C]">
+          <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#1CB8D2]">
             {product.dimensions}
           </span>
-          <span className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase text-[#F5F0E8]/70">
+          <span className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase text-white/60">
             <Eye size={12} />
             Available {product.stock}
           </span>
@@ -148,11 +148,11 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
       </div>
 
       <div className="p-4 md:p-5">
-        <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#F5F0E8]/35 mb-1">
+        <p className="font-sans text-[10px] tracking-[0.18em] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
           {product.material}
         </p>
         <h3
-          className="font-display font-medium text-[#F5F0E8] mb-3 leading-snug group-hover:text-[#C9A84C] transition-colors duration-300"
+          className="font-display font-semibold text-white mb-3 leading-snug group-hover:text-[#1CB8D2] transition-colors duration-300"
           style={{
             fontFamily: 'Cormorant Garamond, serif',
             fontSize: 'clamp(1.0rem, 1.8vw, 1.2rem)',
@@ -162,13 +162,13 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         </h3>
         <div className="flex items-center justify-between gap-3">
           <span
-            className="font-display font-semibold gold-text"
+            className="font-display font-bold cyan-text"
             style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem' }}
           >
             {currency.format(product.price)}
           </span>
           <button
-            className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase text-[#C9A84C] hover:text-[#F0D080] transition-colors group/btn disabled:opacity-40"
+            className="flex items-center gap-1.5 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-[#1CB8D2] hover:text-white transition-colors disabled:opacity-40"
             aria-label={`Buy ${product.name}`}
             disabled={product.stock <= 0}
             onClick={() => onBuy(product)}
@@ -291,7 +291,7 @@ export default function ProductShowcase() {
     <section
       id="sculptures"
       className="py-20 md:py-28"
-      style={{ background: '#111111' }}
+      style={{ background: '#162540' }}
       aria-label="Featured Sculptures"
     >
       <div className="section-container" ref={ref}>
@@ -305,13 +305,13 @@ export default function ProductShowcase() {
             <span className="section-label">Hand-Picked for Collectors</span>
           </div>
           <h2
-            className="font-display font-light text-[#F5F0E8] leading-[1.1]"
+            className="font-display font-light text-white leading-[1.1]"
             style={{
               fontFamily: 'Cormorant Garamond, serif',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
             }}
           >
-            Featured <em style={{ color: '#C9A84C' }}>Sculptures</em>
+            Featured <span className="font-semibold" style={{ color: '#1CB8D2' }}>Sculptures</span>
           </h2>
         </motion.div>
 
@@ -327,14 +327,10 @@ export default function ProductShowcase() {
               onClick={() => setActiveFilter(filter)}
               className="relative px-5 py-2 font-sans text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
               style={{
-                color: activeFilter === filter ? '#0a0a0a' : '#F5F0E8',
-                opacity: activeFilter === filter ? 1 : 0.45,
-                background: activeFilter === filter
-                  ? 'linear-gradient(135deg, #C9A84C, #F0D080)'
-                  : 'transparent',
-                border: activeFilter === filter
-                  ? 'none'
-                  : '1px solid rgba(201,168,76,0.15)',
+                color: activeFilter === filter ? '#FFFFFF' : 'rgba(255,255,255,0.45)',
+                background: activeFilter === filter ? '#1CB8D2' : 'transparent',
+                border: activeFilter === filter ? 'none' : '1px solid rgba(28,184,210,0.2)',
+                borderRadius: '6px',
               }}
             >
               {filter}
@@ -343,7 +339,7 @@ export default function ProductShowcase() {
         </motion.div>
 
         {isLoading && (
-          <div className="mb-8 flex items-center justify-center gap-3 text-sm text-[#F5F0E8]/50">
+          <div className="mb-8 flex items-center justify-center gap-3 text-sm text-white/50">
             <Loader2 size={16} className="animate-spin" />
             Loading live catalogue
           </div>
@@ -389,8 +385,8 @@ export default function ProductShowcase() {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
         >
-          <div className="divider-gold mb-8" />
-          <a href="#contact" className="btn-ghost-gold">
+          <div className="divider-cyan mb-8" />
+          <a href="#contact" className="btn-ghost">
             Request the Full Catalogue
           </a>
         </motion.div>
@@ -400,15 +396,16 @@ export default function ProductShowcase() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
           <form
             onSubmit={startPayment}
-            className="w-full max-w-md border border-[#C9A84C]/20 bg-[#141210] p-6 shadow-2xl"
+            className="w-full max-w-md rounded-xl p-6 shadow-2xl"
+            style={{ background: '#1D3050', border: '2px solid rgba(28,184,210,0.3)' }}
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <p className="section-label mb-3">Secure Checkout</p>
-                <h3 className="font-display text-3xl">{selectedProduct.name}</h3>
-                <p className="mt-1 text-[#C9A84C]">{currency.format(selectedProduct.price)}</p>
+                <h3 className="font-display text-3xl text-white" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{selectedProduct.name}</h3>
+                <p className="mt-1 font-bold text-[#1CB8D2]">{currency.format(selectedProduct.price)}</p>
               </div>
-              <button type="button" onClick={() => setSelectedProduct(null)} aria-label="Close checkout">
+              <button type="button" onClick={() => setSelectedProduct(null)} aria-label="Close checkout" className="text-white/50 hover:text-white transition-colors">
                 <X size={18} />
               </button>
             </div>
@@ -417,7 +414,8 @@ export default function ProductShowcase() {
                 value={buyer.name}
                 onChange={(event) => setBuyer((previous) => ({ ...previous, name: event.target.value }))}
                 placeholder="Full name"
-                className="w-full border border-[#C9A84C]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
                 required
               />
               <input
@@ -425,17 +423,19 @@ export default function ProductShowcase() {
                 onChange={(event) => setBuyer((previous) => ({ ...previous, email: event.target.value }))}
                 placeholder="Email"
                 type="email"
-                className="w-full border border-[#C9A84C]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
                 required
               />
               <input
                 value={buyer.phone}
                 onChange={(event) => setBuyer((previous) => ({ ...previous, phone: event.target.value }))}
                 placeholder="Phone / WhatsApp"
-                className="w-full border border-[#C9A84C]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
               />
             </div>
-            <button className="btn-gold mt-5 w-full justify-center" disabled={isPaying}>
+            <button className="btn-primary mt-5 w-full justify-center rounded-lg" disabled={isPaying}>
               {isPaying ? 'Opening Checkout...' : 'Pay Securely'}
               {isPaying ? <Loader2 size={14} className="animate-spin" /> : <ShoppingBag size={14} />}
             </button>

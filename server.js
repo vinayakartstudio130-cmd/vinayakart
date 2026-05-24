@@ -105,9 +105,26 @@ const adminUserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    passwordHash: { type: String, required: true },
+    phone: { type: String, default: '' },
+    address: {
+      line1: { type: String, default: '' },
+      city: { type: String, default: '' },
+      state: { type: String, default: '' },
+      pincode: { type: String, default: '' },
+    },
+  },
+  { timestamps: true },
+);
+
 const orderSchema = new mongoose.Schema(
   {
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
     customer: {
       name: { type: String, required: true },
       email: { type: String, required: true },
@@ -117,10 +134,11 @@ const orderSchema = new mongoose.Schema(
     currency: { type: String, default: 'INR' },
     status: {
       type: String,
-      enum: ['created', 'paid', 'failed'],
+      enum: ['created', 'pending_verification', 'paid', 'processing', 'dispatched', 'delivered', 'cancelled', 'failed'],
       default: 'created',
     },
-    razorpayOrderId: { type: String, required: true },
+    upiTransactionId: { type: String, default: '' },
+    razorpayOrderId: { type: String, default: '' },
     razorpayPaymentId: { type: String, default: '' },
     razorpaySignature: { type: String, default: '' },
   },
@@ -130,6 +148,7 @@ const orderSchema = new mongoose.Schema(
 const Product = mongoose.model('Product', productSchema);
 const Enquiry = mongoose.model('Enquiry', enquirySchema);
 const AdminUser = mongoose.model('AdminUser', adminUserSchema);
+const User = mongoose.model('User', userSchema);
 const Order = mongoose.model('Order', orderSchema);
 
 const seedProducts = [
@@ -201,6 +220,40 @@ const requireAdmin = asyncHandler(async (req, res, next) => {
     res.status(401).json({ error: 'Invalid or expired admin session.' });
   }
 });
+
+const requireUser = asyncHandler(async (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    res.status(401).json({ error: 'Login required.' });
+    return;
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.role !== 'user') {
+      res.status(403).json({ error: 'Access denied.' });
+      return;
+    }
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).json({ error: 'Invalid or expired session.' });
+  }
+});
+
+const optionalUser = (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      if (decoded.role === 'user') req.user = decoded;
+    } catch {
+      // ignore
+    }
+  }
+  next();
+};
 
 const requireFields = (body, fields) => {
   const missing = fields.filter((field) => !String(body[field] ?? '').trim());
@@ -309,6 +362,7 @@ app.post(
 
 app.post(
   '/api/payments/create-order',
+  optionalUser,
   asyncHandler(async (req, res) => {
     if (!razorpay) {
       res.status(503).json({ error: 'Payment gateway is not configured.' });
@@ -336,6 +390,7 @@ app.post(
 
     const order = await Order.create({
       product: product._id,
+      user: req.user?.id || null,
       customer: {
         name: req.body.name,
         email: req.body.email,
@@ -396,6 +451,192 @@ app.post(
 
     await Product.findByIdAndUpdate(order.product, { $inc: { stock: -1 } });
     res.json({ message: 'Payment verified.', orderId: order._id });
+  }),
+);
+
+app.post(
+  '/api/orders',
+  optionalUser,
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['productId', 'name', 'email', 'upiTransactionId']);
+
+    const utrRaw = String(req.body.upiTransactionId).trim();
+    if (utrRaw.length < 6) {
+      res.status(400).json({ error: 'Please enter a valid UPI transaction ID.' });
+      return;
+    }
+
+    const duplicate = await Order.findOne({ upiTransactionId: utrRaw });
+    if (duplicate) {
+      res.status(409).json({ error: 'This transaction ID has already been submitted.' });
+      return;
+    }
+
+    const product = await Product.findOne({ _id: req.body.productId, isActive: true });
+    if (!product || product.stock <= 0) {
+      res.status(404).json({ error: 'Product is unavailable.' });
+      return;
+    }
+
+    const order = await Order.create({
+      product: product._id,
+      user: req.user?.id || null,
+      customer: {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone || '',
+      },
+      amount: product.price,
+      currency: product.currency || 'INR',
+      status: 'pending_verification',
+      upiTransactionId: utrRaw,
+    });
+
+    res.status(201).json({
+      orderId: order._id,
+      status: order.status,
+      amount: order.amount,
+    });
+  }),
+);
+
+app.post(
+  '/api/auth/register',
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['name', 'email', 'password']);
+
+    const email = req.body.email.toLowerCase().trim();
+
+    if (String(req.body.password).length < 8) {
+      res.status(400).json({ error: 'Password must be at least 8 characters.' });
+      return;
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+      res.status(409).json({ error: 'An account with this email already exists.' });
+      return;
+    }
+
+    const passwordHash = await bcrypt.hash(req.body.password, 12);
+    const user = await User.create({
+      name: req.body.name.trim(),
+      email,
+      passwordHash,
+      phone: req.body.phone || '',
+    });
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user.name, role: 'user' },
+      JWT_SECRET,
+      { expiresIn: '30d' },
+    );
+
+    res.status(201).json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  }),
+);
+
+app.post(
+  '/api/auth/login',
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['email', 'password']);
+
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
+    const isValid = user && (await bcrypt.compare(req.body.password, user.passwordHash));
+
+    if (!isValid) {
+      res.status(401).json({ error: 'Invalid email or password.' });
+      return;
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user.name, role: 'user' },
+      JWT_SECRET,
+      { expiresIn: '30d' },
+    );
+
+    res.json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  }),
+);
+
+app.get(
+  '/api/auth/me',
+  requireUser,
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id).select('-passwordHash');
+    if (!user) {
+      res.status(404).json({ error: 'User not found.' });
+      return;
+    }
+    res.json({ user });
+  }),
+);
+
+app.put(
+  '/api/auth/me',
+  requireUser,
+  asyncHandler(async (req, res) => {
+    const updates = {};
+    if (req.body.name) updates.name = String(req.body.name).trim();
+    if (req.body.phone !== undefined) updates.phone = String(req.body.phone);
+    if (req.body.address && typeof req.body.address === 'object') {
+      updates.address = {
+        line1: String(req.body.address.line1 || ''),
+        city: String(req.body.address.city || ''),
+        state: String(req.body.address.state || ''),
+        pincode: String(req.body.address.pincode || ''),
+      };
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id, updates, {
+      new: true,
+      runValidators: true,
+    }).select('-passwordHash');
+
+    res.json({ user });
+  }),
+);
+
+app.put(
+  '/api/auth/me/password',
+  requireUser,
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['currentPassword', 'newPassword']);
+
+    const user = await User.findById(req.user.id);
+    const isValid = user && (await bcrypt.compare(req.body.currentPassword, user.passwordHash));
+
+    if (!isValid) {
+      res.status(401).json({ error: 'Current password is incorrect.' });
+      return;
+    }
+
+    if (String(req.body.newPassword).length < 8) {
+      res.status(400).json({ error: 'New password must be at least 8 characters.' });
+      return;
+    }
+
+    const passwordHash = await bcrypt.hash(req.body.newPassword, 12);
+    await User.findByIdAndUpdate(req.user.id, { passwordHash });
+
+    res.json({ message: 'Password updated.' });
+  }),
+);
+
+app.get(
+  '/api/orders/my',
+  requireUser,
+  asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user.id })
+      .populate('product', 'name image material price')
+      .sort({ createdAt: -1 });
+    res.json({ orders });
   }),
 );
 
@@ -545,8 +786,41 @@ app.get(
   '/api/admin/orders',
   requireAdmin,
   asyncHandler(async (req, res) => {
-    const orders = await Order.find().populate('product').sort({ createdAt: -1 });
+    const orders = await Order.find().populate('product').populate('user', 'name email').sort({ createdAt: -1 });
     res.json({ orders });
+  }),
+);
+
+app.put(
+  '/api/admin/orders/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const allowed = ['created', 'pending_verification', 'paid', 'processing', 'dispatched', 'delivered', 'cancelled', 'failed'];
+    const { status } = req.body;
+
+    if (!status || !allowed.includes(status)) {
+      res.status(400).json({ error: 'Invalid status value.' });
+      return;
+    }
+
+    const previous = await Order.findById(req.params.id);
+    if (!previous) {
+      res.status(404).json({ error: 'Order not found.' });
+      return;
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true },
+    ).populate('product').populate('user', 'name email');
+
+    // Decrement stock only when transitioning into 'paid' for the first time
+    if (status === 'paid' && previous.status !== 'paid' && order.product) {
+      await Product.findByIdAndUpdate(order.product._id, { $inc: { stock: -1 } });
+    }
+
+    res.json({ order });
   }),
 );
 

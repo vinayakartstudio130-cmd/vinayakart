@@ -90,3 +90,25 @@ export function adminRequest<T>(path: string, options: ApiRequestOptions = {}) {
     },
   });
 }
+
+export const getUserToken = () => window.localStorage.getItem('vinayakart_user_token');
+
+export const setUserToken = (token: string) => {
+  window.localStorage.setItem('vinayakart_user_token', token);
+};
+
+export const clearUserToken = () => {
+  window.localStorage.removeItem('vinayakart_user_token');
+};
+
+export function userRequest<T>(path: string, options: ApiRequestOptions = {}) {
+  const token = getUserToken();
+
+  return apiRequest<T>(path, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}

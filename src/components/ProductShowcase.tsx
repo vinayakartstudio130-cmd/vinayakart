@@ -1,7 +1,12 @@
 ﻿import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { AlertCircle, CheckCircle, Eye, Heart, Loader2, ShoppingBag, X } from 'lucide-react'
-import { apiRequest } from '../lib/api'
+import { AlertCircle, CheckCircle, Copy, Eye, Heart, Loader2, ShoppingBag, X } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+import { apiRequest, getUserToken } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
+
+const UPI_ID = import.meta.env.VITE_UPI_ID as string | undefined
+const UPI_NAME = import.meta.env.VITE_UPI_NAME as string | undefined || 'VinayakArt'
 
 interface Product {
   _id: string
@@ -14,10 +19,6 @@ interface Product {
   image: string
   dimensions: string
   stock: number
-}
-
-interface PaymentConfig {
-  razorpayKeyId: string
 }
 
 const fallbackProducts: Product[] = [
@@ -64,19 +65,7 @@ const badgeStyles: Record<string, React.CSSProperties> = {
   },
 }
 
-const loadRazorpayScript = () =>
-  new Promise<boolean>((resolve) => {
-    if (window.Razorpay) {
-      resolve(true)
-      return
-    }
-
-    const script = document.createElement('script')
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    script.onload = () => resolve(true)
-    script.onerror = () => resolve(false)
-    document.body.appendChild(script)
-  })
+type CheckoutStep = 'details' | 'qr' | 'utr' | 'success'
 
 interface ProductCardProps {
   product: Product
@@ -183,14 +172,18 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 }
 
 export default function ProductShowcase() {
+  const { user } = useAuth()
   const [activeFilter, setActiveFilter] = useState('All')
   const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [step, setStep] = useState<CheckoutStep>('details')
   const [buyer, setBuyer] = useState({ name: '', email: '', phone: '' })
+  const [utr, setUtr] = useState('')
+  const [copied, setCopied] = useState(false)
   const [statusMessage, setStatusMessage] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [isPaying, setIsPaying] = useState(false)
+  const [isBusy, setIsBusy] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
@@ -217,75 +210,62 @@ export default function ProductShowcase() {
       .finally(() => setIsLoading(false))
   }, [])
 
-  const filtered = activeFilter === 'All'
-    ? products
-    : products.filter((p) => p.category === activeFilter.toLowerCase())
-
-  const startPayment = async (event: FormEvent) => {
-    event.preventDefault()
-
-    if (!selectedProduct) return
-
+  const openCheckout = (product: Product) => {
+    setBuyer({ name: user?.name ?? '', email: user?.email ?? '', phone: '' })
+    setUtr('')
     setError('')
-    setStatusMessage('')
-    setIsPaying(true)
+    setStep('details')
+    setSelectedProduct(product)
+  }
 
+  const closeCheckout = () => {
+    setSelectedProduct(null)
+    setStep('details')
+    setError('')
+    setUtr('')
+  }
+
+  const handleDetailsSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setStep('qr')
+  }
+
+  const copyUpiId = () => {
+    if (!UPI_ID) return
+    navigator.clipboard.writeText(UPI_ID).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  const handleConfirmOrder = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!selectedProduct) return
+    setError('')
+    setIsBusy(true)
     try {
-      const [scriptLoaded, config] = await Promise.all([
-        loadRazorpayScript(),
-        apiRequest<PaymentConfig>('/api/config'),
-      ])
-
-      if (!scriptLoaded || !window.Razorpay) {
-        throw new Error('Payment checkout failed to load. Please try again.')
-      }
-
-      if (!config.razorpayKeyId) {
-        throw new Error('Online payments are not active yet. Please contact us to reserve this piece.')
-      }
-
-      const order = await apiRequest<{
-        orderId: string
-        razorpayOrderId: string
-        amount: number
-        currency: string
-      }>('/api/payments/create-order', {
+      const userToken = getUserToken()
+      await apiRequest('/api/orders', {
         method: 'POST',
         body: JSON.stringify({
           productId: selectedProduct._id,
           ...buyer,
+          upiTransactionId: utr.trim(),
         }),
+        headers: userToken ? { Authorization: `Bearer ${userToken}` } : {},
       })
-
-      const checkout = new window.Razorpay({
-        key: config.razorpayKeyId,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'VinayakArt',
-        description: selectedProduct.name,
-        order_id: order.razorpayOrderId,
-        prefill: buyer,
-        theme: { color: '#C9A84C' },
-        handler: async (response: Record<string, string>) => {
-          await apiRequest('/api/payments/verify', {
-            method: 'POST',
-            body: JSON.stringify({
-              orderId: order.orderId,
-              ...response,
-            }),
-          })
-          setSelectedProduct(null)
-          setStatusMessage('Payment verified. Our curator will contact you with fulfilment details.')
-        },
-      })
-
-      checkout.open()
-    } catch (paymentError) {
-      setError(paymentError instanceof Error ? paymentError.message : 'Payment could not be started.')
+      setStep('success')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not place order. Please try again.')
     } finally {
-      setIsPaying(false)
+      setIsBusy(false)
     }
   }
+
+  const filtered = activeFilter === 'All'
+    ? products
+    : products.filter((p) => p.category === activeFilter.toLowerCase())
 
   return (
     <section
@@ -372,7 +352,7 @@ export default function ProductShowcase() {
               <ProductCard
                 key={product._id}
                 product={product}
-                onBuy={setSelectedProduct}
+                onBuy={openCheckout}
                 currency={currency}
               />
             ))}
@@ -393,53 +373,206 @@ export default function ProductShowcase() {
       </div>
 
       {selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
-          <form
-            onSubmit={startPayment}
-            className="w-full max-w-md rounded-xl p-6 shadow-2xl"
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-6 overflow-y-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-md rounded-2xl shadow-2xl my-auto"
             style={{ background: '#1D3050', border: '2px solid rgba(28,184,210,0.3)' }}
           >
-            <div className="mb-5 flex items-start justify-between gap-4">
+            {/* Header — always visible */}
+            <div className="flex items-start justify-between gap-4 p-6 pb-4 border-b border-[rgba(28,184,210,0.12)]">
               <div>
-                <p className="section-label mb-3">Secure Checkout</p>
-                <h3 className="font-display text-3xl text-white" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>{selectedProduct.name}</h3>
-                <p className="mt-1 font-bold text-[#1CB8D2]">{currency.format(selectedProduct.price)}</p>
+                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1CB8D2]/70 mb-1">
+                  {step === 'details' && 'Step 1 of 3 · Your Details'}
+                  {step === 'qr'      && 'Step 2 of 3 · Pay via UPI'}
+                  {step === 'utr'     && 'Step 3 of 3 · Confirm Payment'}
+                  {step === 'success' && 'Order Placed'}
+                </p>
+                <h3 className="text-white font-semibold text-xl leading-snug" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
+                  {selectedProduct.name}
+                </h3>
+                <p className="text-[#1CB8D2] font-bold mt-0.5">{currency.format(selectedProduct.price)}</p>
               </div>
-              <button type="button" onClick={() => setSelectedProduct(null)} aria-label="Close checkout" className="text-white/50 hover:text-white transition-colors">
+              <button onClick={closeCheckout} className="text-white/40 hover:text-white transition-colors mt-1 flex-shrink-0">
                 <X size={18} />
               </button>
             </div>
-            <div className="space-y-3">
-              <input
-                value={buyer.name}
-                onChange={(event) => setBuyer((previous) => ({ ...previous, name: event.target.value }))}
-                placeholder="Full name"
-                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
-                required
-              />
-              <input
-                value={buyer.email}
-                onChange={(event) => setBuyer((previous) => ({ ...previous, email: event.target.value }))}
-                placeholder="Email"
-                type="email"
-                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
-                required
-              />
-              <input
-                value={buyer.phone}
-                onChange={(event) => setBuyer((previous) => ({ ...previous, phone: event.target.value }))}
-                placeholder="Phone / WhatsApp"
-                className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(28,184,210,0.25)' }}
-              />
+
+            <div className="p-6">
+              {error && (
+                <div className="mb-4 flex items-center gap-2 rounded-lg px-4 py-3 text-sm"
+                  style={{ background: 'rgba(220,60,60,0.12)', border: '1px solid rgba(220,60,60,0.3)', color: '#fca5a5' }}>
+                  <AlertCircle size={14} className="flex-shrink-0" /> {error}
+                </div>
+              )}
+
+              {/* Step 1: Customer Details */}
+              {step === 'details' && (
+                <form onSubmit={handleDetailsSubmit} className="space-y-3">
+                  {[
+                    { key: 'name',  placeholder: 'Full name',       type: 'text',  required: true },
+                    { key: 'email', placeholder: 'Email address',    type: 'email', required: true },
+                    { key: 'phone', placeholder: 'Phone / WhatsApp', type: 'tel',   required: false },
+                  ].map(({ key, placeholder, type, required }) => (
+                    <input
+                      key={key}
+                      type={type}
+                      value={buyer[key as keyof typeof buyer]}
+                      onChange={(e) => setBuyer((p) => ({ ...p, [key]: e.target.value }))}
+                      placeholder={placeholder}
+                      required={required}
+                      className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg placeholder-white/30"
+                      style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(28,184,210,0.25)' }}
+                    />
+                  ))}
+                  <button
+                    type="submit"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-sm tracking-wider uppercase mt-1"
+                    style={{ background: '#1CB8D2', color: '#162540' }}
+                  >
+                    Continue to Payment
+                  </button>
+                </form>
+              )}
+
+              {/* Step 2: UPI QR Code */}
+              {step === 'qr' && (
+                <div className="text-center">
+                  {UPI_ID ? (
+                    <>
+                      <p className="text-white/60 text-sm mb-4">
+                        Scan the QR code with any UPI app and pay <span className="text-[#1CB8D2] font-bold">{currency.format(selectedProduct.price)}</span>
+                      </p>
+
+                      <div className="inline-block p-4 rounded-xl mb-4" style={{ background: '#FFFFFF' }}>
+                        <QRCodeSVG
+                          value={`upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${selectedProduct.price}&cu=INR&tn=${encodeURIComponent(`Order: ${selectedProduct.name}`)}`}
+                          size={200}
+                          bgColor="#FFFFFF"
+                          fgColor="#162540"
+                          level="M"
+                        />
+                      </div>
+
+                      <div
+                        className="flex items-center justify-between gap-3 rounded-lg px-4 py-3 mb-5"
+                        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(28,184,210,0.2)' }}
+                      >
+                        <div className="text-left min-w-0">
+                          <p className="text-white/40 text-[10px] uppercase tracking-widest mb-0.5">UPI ID</p>
+                          <p className="text-white font-mono text-sm truncate">{UPI_ID}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={copyUpiId}
+                          className="flex items-center gap-1.5 text-xs font-semibold flex-shrink-0 transition-colors"
+                          style={{ color: copied ? '#6ee7b7' : '#1CB8D2' }}
+                        >
+                          {copied ? <CheckCircle size={13} /> : <Copy size={13} />}
+                          {copied ? 'Copied' : 'Copy'}
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="rounded-lg px-4 py-6 mb-5 text-center" style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)' }}>
+                      <p className="text-yellow-200 text-sm">UPI ID not configured yet.</p>
+                      <p className="text-yellow-200/60 text-xs mt-1">Set <code>VITE_UPI_ID</code> in your .env file.</p>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => { setError(''); setStep('utr') }}
+                    className="w-full py-3 rounded-lg font-semibold text-sm tracking-wider uppercase"
+                    style={{ background: '#1CB8D2', color: '#162540' }}
+                  >
+                    I've Completed Payment →
+                  </button>
+                  <button
+                    onClick={() => setStep('details')}
+                    className="w-full py-2.5 mt-2 text-sm text-white/40 hover:text-white/70 transition-colors"
+                  >
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {/* Step 3: Enter UTR */}
+              {step === 'utr' && (
+                <form onSubmit={handleConfirmOrder} className="space-y-4">
+                  <div>
+                    <p className="text-white/70 text-sm mb-4">
+                      Enter the <span className="text-white font-medium">UPI Transaction ID</span> (UTR) from your payment app. You'll find it in the transaction receipt.
+                    </p>
+                    <label className="block text-xs font-semibold tracking-widest uppercase text-white/50 mb-1.5">
+                      UPI Transaction ID / UTR
+                    </label>
+                    <input
+                      type="text"
+                      value={utr}
+                      onChange={(e) => setUtr(e.target.value)}
+                      placeholder="e.g. 123456789012"
+                      required
+                      minLength={6}
+                      className="w-full px-4 py-3 text-sm text-white outline-none rounded-lg font-mono placeholder-white/25"
+                      style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(28,184,210,0.25)' }}
+                    />
+                    <p className="text-white/30 text-xs mt-1.5">
+                      12-digit reference shown after payment in GPay, PhonePe, Paytm, etc.
+                    </p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isBusy || !utr.trim()}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-sm tracking-wider uppercase disabled:opacity-50"
+                    style={{ background: '#1CB8D2', color: '#162540' }}
+                  >
+                    {isBusy ? <Loader2 size={14} className="animate-spin" /> : <ShoppingBag size={14} />}
+                    {isBusy ? 'Placing Order...' : 'Confirm Order'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep('qr')}
+                    className="w-full py-2.5 text-sm text-white/40 hover:text-white/70 transition-colors"
+                  >
+                    ← Back to QR Code
+                  </button>
+                </form>
+              )}
+
+              {/* Step 4: Success */}
+              {step === 'success' && (
+                <div className="text-center py-4">
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                    style={{ background: 'rgba(16,185,129,0.15)', border: '2px solid rgba(16,185,129,0.4)' }}
+                  >
+                    <CheckCircle size={28} style={{ color: '#6ee7b7' }} />
+                  </div>
+                  <h4 className="text-white font-semibold text-xl mb-2" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
+                    Order Placed!
+                  </h4>
+                  <p className="text-white/60 text-sm mb-1">
+                    We're verifying your payment.
+                  </p>
+                  <p className="text-white/40 text-xs mb-6">
+                    You'll see the status update in <span className="text-[#1CB8D2]">My Account → Orders</span> once confirmed.
+                  </p>
+                  <button
+                    onClick={() => {
+                      closeCheckout()
+                      setStatusMessage('Order placed! We\'ll verify your payment and update the status shortly.')
+                    }}
+                    className="w-full py-3 rounded-lg font-semibold text-sm tracking-wider uppercase"
+                    style={{ background: '#1CB8D2', color: '#162540' }}
+                  >
+                    Done
+                  </button>
+                </div>
+              )}
             </div>
-            <button className="btn-primary mt-5 w-full justify-center rounded-lg" disabled={isPaying}>
-              {isPaying ? 'Opening Checkout...' : 'Pay Securely'}
-              {isPaying ? <Loader2 size={14} className="animate-spin" /> : <ShoppingBag size={14} />}
-            </button>
-          </form>
+          </motion.div>
         </div>
       )}
     </section>

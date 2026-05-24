@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+﻿import { FormEvent, useEffect, useMemo, useState } from 'react'
 import {
   AlertCircle,
   CheckCircle,
@@ -45,6 +45,30 @@ interface Enquiry {
   createdAt: string
 }
 
+type OrderStatus = 'created' | 'pending_verification' | 'paid' | 'processing' | 'dispatched' | 'delivered' | 'cancelled' | 'failed'
+
+const ORDER_STATUSES: Array<{ value: OrderStatus; label: string }> = [
+  { value: 'pending_verification', label: 'Pending Verification' },
+  { value: 'created', label: 'Awaiting Payment' },
+  { value: 'paid', label: 'Payment Confirmed' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'dispatched', label: 'Dispatched' },
+  { value: 'delivered', label: 'Delivered' },
+  { value: 'cancelled', label: 'Cancelled' },
+  { value: 'failed', label: 'Failed' },
+]
+
+const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
+  pending_verification: '#fb923c',
+  created: '#fbbf24',
+  paid: '#34d399',
+  processing: '#60a5fa',
+  dispatched: '#a78bfa',
+  delivered: '#34d399',
+  cancelled: '#f87171',
+  failed: '#f87171',
+}
+
 interface Order {
   _id: string
   product?: Product
@@ -55,7 +79,8 @@ interface Order {
   }
   amount: number
   currency: string
-  status: string
+  status: OrderStatus
+  upiTransactionId?: string
   razorpayPaymentId?: string
   createdAt: string
 }
@@ -221,6 +246,19 @@ export default function AdminPanel() {
       body: JSON.stringify({ status }),
     })
     await loadAdminData()
+  }
+
+  const updateOrderStatus = async (id: string, status: OrderStatus) => {
+    setError('')
+    try {
+      await adminRequest(`/api/admin/orders/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ status }),
+      })
+      setOrders((prev) => prev.map((o) => (o._id === id ? { ...o, status } : o)))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update order status.')
+    }
   }
 
   if (!isLoggedIn) {
@@ -445,26 +483,79 @@ export default function AdminPanel() {
 
         {activeTab === 'orders' && (
           <div className="grid gap-4">
-            {orders.map((order) => (
-              <article key={order._id} className="border border-[#C9A84C]/15 bg-[#141210] p-5">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-display text-2xl">
-                      {order.product?.name || 'Product unavailable'}
-                    </h3>
-                    <p className="text-sm text-[#F5F0E8]/50">
-                      {order.customer.name} | {order.customer.email}
-                    </p>
+            {orders.map((order) => {
+              const isPending = order.status === 'pending_verification'
+              return (
+                <article
+                  key={order._id}
+                  className="border bg-[#141210] p-5"
+                  style={{
+                    borderColor: isPending ? 'rgba(251,146,60,0.5)' : 'rgba(201,168,76,0.15)',
+                    boxShadow: isPending ? '0 0 0 1px rgba(251,146,60,0.2)' : 'none',
+                  }}
+                >
+                  {isPending && (
+                    <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded text-xs font-semibold" style={{ background: 'rgba(251,146,60,0.12)', color: '#fb923c' }}>
+                      <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse inline-block" />
+                      Awaiting payment verification
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-display text-2xl">
+                        {order.product?.name || 'Product unavailable'}
+                      </h3>
+                      <p className="text-sm text-[#F5F0E8]/50 mt-0.5">
+                        {order.customer.name} · {order.customer.email}
+                        {order.customer.phone ? ` · ${order.customer.phone}` : ''}
+                      </p>
+
+                      {/* UPI Transaction ID — highlighted for pending verification */}
+                      {order.upiTransactionId && (
+                        <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded text-xs font-mono"
+                          style={{
+                            background: isPending ? 'rgba(251,146,60,0.1)' : 'rgba(255,255,255,0.05)',
+                            border: `1px solid ${isPending ? 'rgba(251,146,60,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                            color: isPending ? '#fb923c' : '#F5F0E8',
+                          }}
+                        >
+                          <span className="text-[#F5F0E8]/40 font-sans not-italic">UTR:</span>
+                          {order.upiTransactionId}
+                        </div>
+                      )}
+
+                      {order.razorpayPaymentId && (
+                        <p className="text-xs text-[#F5F0E8]/30 font-mono mt-1">{order.razorpayPaymentId}</p>
+                      )}
+
+                      <p className="text-xs text-[#F5F0E8]/30 mt-1.5">
+                        {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                      <p className="text-[#C9A84C] font-semibold">{currency.format(order.amount)}</p>
+                      <select
+                        value={order.status}
+                        onChange={(e) => updateOrderStatus(order._id, e.target.value as OrderStatus)}
+                        className="border bg-[#0a0a0a] px-3 py-1.5 text-xs font-semibold uppercase tracking-widest outline-none cursor-pointer"
+                        style={{
+                          borderColor: `${ORDER_STATUS_COLORS[order.status]}40`,
+                          color: ORDER_STATUS_COLORS[order.status],
+                        }}
+                      >
+                        {ORDER_STATUSES.map((s) => (
+                          <option key={s.value} value={s.value} style={{ color: ORDER_STATUS_COLORS[s.value] }}>
+                            {s.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-[#C9A84C]">{currency.format(order.amount)}</p>
-                    <p className="text-xs uppercase tracking-[0.16em] text-[#F5F0E8]/40">
-                      {order.status}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              )
+            })}
             {orders.length === 0 && (
               <div className="border border-[#C9A84C]/15 bg-[#141210] p-8 text-center text-[#F5F0E8]/50">
                 <ShoppingBag className="mx-auto mb-3 text-[#C9A84C]" />
@@ -477,3 +568,4 @@ export default function AdminPanel() {
     </main>
   )
 }
+

@@ -1,6 +1,8 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Menu, MessageCircle, ChevronRight } from 'lucide-react'
+import { ChevronRight, LogOut, Menu, MessageCircle, Search, User, X } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 const navLinks = [
   { label: 'Collections', href: '#collections' },
@@ -11,9 +13,12 @@ const navLinks = [
 ]
 
 export default function Navbar() {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -25,6 +30,13 @@ export default function Navbar() {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  const handleLogout = () => {
+    logout()
+    setUserMenuOpen(false)
+    setMobileOpen(false)
+    navigate('/')
+  }
 
   return (
     <>
@@ -90,11 +102,79 @@ export default function Navbar() {
                 <Search size={16} />
               </button>
 
+              {/* User auth buttons */}
+              {user ? (
+                <div className="relative hidden md:block">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-[#1CB8D2] transition-colors duration-300"
+                    style={{ border: '1px solid rgba(28,184,210,0.2)' }}
+                  >
+                    <User size={14} />
+                    <span className="max-w-[100px] truncate text-[11px] font-semibold tracking-[0.1em]">
+                      {user.name.split(' ')[0]}
+                    </span>
+                  </button>
+
+                  <AnimatePresence>
+                    {userMenuOpen && (
+                      <>
+                        <div className="fixed inset-0 z-[60]" onClick={() => setUserMenuOpen(false)} />
+                        <motion.div
+                          initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 top-full mt-2 w-48 rounded-xl overflow-hidden z-[70]"
+                          style={{ background: '#1D3050', border: '1px solid rgba(28,184,210,0.25)', boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
+                        >
+                          <div className="px-4 py-3 border-b border-[rgba(28,184,210,0.1)]">
+                            <p className="text-white text-xs font-semibold truncate">{user.name}</p>
+                            <p className="text-white/40 text-[11px] truncate mt-0.5">{user.email}</p>
+                          </div>
+                          <Link
+                            to="/account"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-3 text-sm text-white/70 hover:text-[#1CB8D2] hover:bg-[rgba(28,184,210,0.08)] transition-colors"
+                          >
+                            <User size={13} />
+                            My Account
+                          </Link>
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-white/70 hover:text-red-400 hover:bg-[rgba(220,60,60,0.08)] transition-colors border-t border-[rgba(28,184,210,0.08)]"
+                          >
+                            <LogOut size={13} />
+                            Sign Out
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <div className="hidden md:flex items-center gap-2">
+                  <Link
+                    to="/login"
+                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white/70 hover:text-[#1CB8D2] transition-colors duration-300"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
+                    style={{ background: '#1CB8D2', color: '#162540' }}
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
+
               <a
                 href="https://wa.me/919876543210"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden md:flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
+                className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
                 style={{ background: '#1CB8D2' }}
               >
                 <MessageCircle size={13} />
@@ -157,7 +237,7 @@ export default function Navbar() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.35, ease: [0.25,0.46,0.45,0.94] }}
+              transition={{ type: 'tween', duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="fixed top-0 right-0 bottom-0 z-[80] w-80 flex flex-col"
               style={{ background: '#162540', borderLeft: '2px solid #1CB8D2' }}
             >
@@ -172,6 +252,14 @@ export default function Navbar() {
                   <X size={18} />
                 </button>
               </div>
+
+              {/* Mobile user info */}
+              {user && (
+                <div className="px-6 py-4 border-b border-[rgba(28,184,210,0.1)]" style={{ background: 'rgba(28,184,210,0.06)' }}>
+                  <p className="text-white text-sm font-semibold">{user.name}</p>
+                  <p className="text-white/40 text-xs mt-0.5">{user.email}</p>
+                </div>
+              )}
 
               <div className="flex-1 overflow-y-auto py-6 px-6 space-y-1">
                 {navLinks.map((link, i) => (
@@ -188,9 +276,49 @@ export default function Navbar() {
                     <ChevronRight size={14} className="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </motion.a>
                 ))}
+
+                {user ? (
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#1CB8D2] transition-colors group border-b border-white/5"
+                  >
+                    My Account
+                    <ChevronRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-white/70 hover:text-[#1CB8D2] transition-colors group border-b border-white/5"
+                    >
+                      Login
+                      <ChevronRight size={14} className="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                    <Link
+                      to="/register"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#1CB8D2] transition-colors group border-b border-white/5"
+                    >
+                      Create Account
+                      <ChevronRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  </>
+                )}
               </div>
 
-              <div className="px-6 pb-8 pt-4 border-t border-[rgba(28,184,210,0.15)]">
+              <div className="px-6 pb-8 pt-4 border-t border-[rgba(28,184,210,0.15)] space-y-3">
+                {user && (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-2 py-3 font-sans text-xs font-semibold tracking-[0.15em] uppercase rounded-sm transition-colors"
+                    style={{ border: '1px solid rgba(220,60,60,0.4)', color: '#fca5a5' }}
+                  >
+                    <LogOut size={14} />
+                    Sign Out
+                  </button>
+                )}
                 <a
                   href="https://wa.me/919876543210"
                   target="_blank"
@@ -209,4 +337,3 @@ export default function Navbar() {
     </>
   )
 }
-

@@ -128,11 +128,17 @@ const fallbackProducts: Product[] = [
   },
 ]
 
-const filters = ['All', 'Stone', 'Brass', 'Terracotta', 'Wood']
+const filters = [
+  { label: 'All',        image: '/images/gallery/chatrapathi shivaji maharaj on a horse.jpeg' },
+  { label: 'Stone',      image: '/images/gallery/shiva black statue.jpeg' },
+  { label: 'Brass',      image: '/images/gallery/dattatreya brass statue.jpeg' },
+  { label: 'Terracotta', image: '/images/gallery/swami samarth.jpeg' },
+  { label: 'Wood',       image: '/images/gallery/1.jpeg' },
+]
 
 const badgeStyles: Record<string, React.CSSProperties> = {
   gold: {
-    background: '#1CB8D2',
+    background: '#D4AF37',
     color: '#FFFFFF',
   },
   red: {
@@ -198,7 +204,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         >
           <Heart
             size={13}
-            className={wishlisted ? 'fill-[#1CB8D2] text-[#1CB8D2]' : 'text-white/60'}
+            className={wishlisted ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-white/60'}
           />
         </button>
 
@@ -206,7 +212,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
           className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex items-center justify-between px-4 py-3 z-10"
           style={{ background: 'rgba(45,10,10,0.95)', borderTop: '1px solid rgba(212,175,55,0.2)' }}
         >
-          <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#1CB8D2]">
+          <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#D4AF37]">
             {product.dimensions}
           </span>
           <span className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase text-white/60">
@@ -221,7 +227,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
           {product.material}
         </p>
         <h3
-          className="font-display font-semibold text-white mb-3 leading-snug group-hover:text-[#1CB8D2] transition-colors duration-300"
+          className="font-display font-semibold text-white mb-3 leading-snug group-hover:text-[#D4AF37] transition-colors duration-300"
           style={{
             fontFamily: 'Montserrat Alternates, sans-serif',
             fontSize: 'clamp(1.0rem, 1.8vw, 1.2rem)',
@@ -278,16 +284,7 @@ export default function ProductShowcase() {
   )
 
   useEffect(() => {
-    apiRequest<{ products: Product[] }>('/api/products')
-      .then((response) => {
-        if (response.products.length > 0) {
-          setProducts(response.products)
-        }
-      })
-      .catch(() => {
-        setError('Live catalogue is temporarily unavailable. Showing curated highlights.')
-      })
-      .finally(() => setIsLoading(false))
+    setIsLoading(false)
   }, [])
 
   const openCheckout = (product: Product) => {
@@ -371,31 +368,45 @@ export default function ProductShowcase() {
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
             }}
           >
-            Featured <span className="font-semibold" style={{ color: '#1CB8D2' }}>Sculptures</span>
+            Featured <span className="font-semibold" style={{ color: '#D4AF37' }}>Sculptures</span>
           </h2>
         </motion.div>
 
         <motion.div
-          className="flex items-center justify-center gap-1 mb-10 md:mb-14 flex-wrap"
+          className="flex items-end justify-center gap-6 md:gap-10 mb-10 md:mb-14 flex-wrap"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className="relative px-5 py-2 font-sans text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
-              style={{
-                color: activeFilter === filter ? '#1C1200' : 'rgba(255,255,255,0.45)',
-                background: activeFilter === filter ? '#D4AF37' : 'transparent',
-                border: activeFilter === filter ? 'none' : '1px solid rgba(212,175,55,0.2)',
-                borderRadius: '6px',
-              }}
-            >
-              {filter}
-            </button>
-          ))}
+          {filters.map((filter) => {
+            const isActive = activeFilter === filter.label
+            return (
+              <button
+                key={filter.label}
+                onClick={() => setActiveFilter(filter.label)}
+                className="flex flex-col items-center gap-2 focus:outline-none transition-all duration-300"
+                style={{ transform: isActive ? 'scale(1.1)' : 'scale(0.9)', opacity: isActive ? 1 : 0.55 }}
+              >
+                <div
+                  className="rounded-full overflow-hidden transition-all duration-300"
+                  style={{
+                    width: isActive ? '72px' : '56px',
+                    height: isActive ? '72px' : '56px',
+                    border: isActive ? '3px solid #D4AF37' : '2px solid rgba(212,175,55,0.3)',
+                    boxShadow: isActive ? '0 0 0 4px rgba(212,175,55,0.2)' : 'none',
+                  }}
+                >
+                  <img src={filter.image} alt={filter.label} className="w-full h-full object-cover" />
+                </div>
+                <span
+                  className="font-sans text-[10px] font-semibold tracking-[0.18em] uppercase transition-colors duration-300"
+                  style={{ color: isActive ? '#D4AF37' : 'rgba(255,255,255,0.5)' }}
+                >
+                  {filter.label}
+                </span>
+              </button>
+            )
+          })}
         </motion.div>
 
         {isLoading && (
@@ -463,7 +474,7 @@ export default function ProductShowcase() {
             {/* Header — always visible */}
             <div className="flex items-start justify-between gap-4 p-6 pb-4 border-b border-[rgba(28,184,210,0.12)]">
               <div>
-                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1CB8D2]/70 mb-1">
+                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#D4AF37]/70 mb-1">
                   {step === 'details' && 'Step 1 of 3 · Your Details'}
                   {step === 'qr'      && 'Step 2 of 3 · Pay via UPI'}
                   {step === 'utr'     && 'Step 3 of 3 · Confirm Payment'}
@@ -472,7 +483,7 @@ export default function ProductShowcase() {
                 <h3 className="text-white font-semibold text-xl leading-snug" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
                   {selectedProduct.name}
                 </h3>
-                <p className="text-[#1CB8D2] font-bold mt-0.5">{currency.format(selectedProduct.price)}</p>
+                <p className="text-[#D4AF37] font-bold mt-0.5">{currency.format(selectedProduct.price)}</p>
               </div>
               <button onClick={closeCheckout} className="text-white/40 hover:text-white transition-colors mt-1 flex-shrink-0">
                 <X size={18} />
@@ -509,7 +520,7 @@ export default function ProductShowcase() {
                   <button
                     type="submit"
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-sm tracking-wider uppercase mt-1"
-                    style={{ background: '#1CB8D2', color: '#162540' }}
+                    style={{ background: '#D4AF37', color: '#162540' }}
                   >
                     Continue to Payment
                   </button>
@@ -522,7 +533,7 @@ export default function ProductShowcase() {
                   {UPI_ID ? (
                     <>
                       <p className="text-white/60 text-sm mb-4">
-                        Scan the QR code with any UPI app and pay <span className="text-[#1CB8D2] font-bold">{currency.format(selectedProduct.price)}</span>
+                        Scan the QR code with any UPI app and pay <span className="text-[#D4AF37] font-bold">{currency.format(selectedProduct.price)}</span>
                       </p>
 
                       <div className="inline-block p-4 rounded-xl mb-4" style={{ background: '#FFFFFF' }}>
@@ -547,7 +558,7 @@ export default function ProductShowcase() {
                           type="button"
                           onClick={copyUpiId}
                           className="flex items-center gap-1.5 text-xs font-semibold flex-shrink-0 transition-colors"
-                          style={{ color: copied ? '#6ee7b7' : '#1CB8D2' }}
+                          style={{ color: copied ? '#6ee7b7' : '#D4AF37' }}
                         >
                           {copied ? <CheckCircle size={13} /> : <Copy size={13} />}
                           {copied ? 'Copied' : 'Copy'}
@@ -564,7 +575,7 @@ export default function ProductShowcase() {
                   <button
                     onClick={() => { setError(''); setStep('utr') }}
                     className="w-full py-3 rounded-lg font-semibold text-sm tracking-wider uppercase"
-                    style={{ background: '#1CB8D2', color: '#162540' }}
+                    style={{ background: '#D4AF37', color: '#162540' }}
                   >
                     I've Completed Payment →
                   </button>
@@ -606,7 +617,7 @@ export default function ProductShowcase() {
                     type="submit"
                     disabled={isBusy || !utr.trim()}
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-sm tracking-wider uppercase disabled:opacity-50"
-                    style={{ background: '#1CB8D2', color: '#162540' }}
+                    style={{ background: '#D4AF37', color: '#162540' }}
                   >
                     {isBusy ? <Loader2 size={14} className="animate-spin" /> : <ShoppingBag size={14} />}
                     {isBusy ? 'Placing Order...' : 'Confirm Order'}
@@ -637,7 +648,7 @@ export default function ProductShowcase() {
                     We're verifying your payment.
                   </p>
                   <p className="text-white/40 text-xs mb-6">
-                    You'll see the status update in <span className="text-[#1CB8D2]">My Account → Orders</span> once confirmed.
+                    You'll see the status update in <span className="text-[#D4AF37]">My Account → Orders</span> once confirmed.
                   </p>
                   <button
                     onClick={() => {
@@ -645,7 +656,7 @@ export default function ProductShowcase() {
                       setStatusMessage('Order placed! We\'ll verify your payment and update the status shortly.')
                     }}
                     className="w-full py-3 rounded-lg font-semibold text-sm tracking-wider uppercase"
-                    style={{ background: '#1CB8D2', color: '#162540' }}
+                    style={{ background: '#D4AF37', color: '#162540' }}
                   >
                     Done
                   </button>

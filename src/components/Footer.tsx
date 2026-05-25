@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUp, Instagram, Facebook, Youtube, Twitter } from 'lucide-react'
+import { ArrowUp, Instagram, Facebook, Youtube } from 'lucide-react'
 
 const footerLinks = {
   Collections: ['Sacred Idols', 'Stone Sculptures', 'Brass Works', 'Terracotta Art', 'Wood Carvings'],
@@ -10,10 +10,9 @@ const footerLinks = {
 }
 
 const socials = [
-  { icon: Instagram, label: 'Instagram', href: '#' },
-  { icon: Facebook, label: 'Facebook', href: '#' },
-  { icon: Youtube, label: 'YouTube', href: '#' },
-  { icon: Twitter, label: 'Twitter / X', href: '#' },
+  { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/vinayakartstudioo?igsh=ZWRmaTRna3htZmJ3' },
+  { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61570960241164&mibextid=ZbWKwL' },
+  { icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/channel/UCWZR3_9uBfcG8FOoV7VZQvQ' },
 ]
 
 export default function Footer() {

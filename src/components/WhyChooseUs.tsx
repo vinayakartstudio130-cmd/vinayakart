@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
     <section
       id="about"
       className="py-20 md:py-28 overflow-hidden"
-      style={{ background: '#2D0A0A' }}
+      style={{ background: '#FAF7F2' }}
       aria-label="Why Collectors Choose VinayakArt"
     >
       <div className="section-container" ref={ref}>
@@ -78,7 +78,7 @@ export default function WhyChooseUs() {
             style={{
               fontFamily: 'Montserrat Alternates, sans-serif',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
-              color: '#FFFFFF',
+              color: '#1C1200',
             }}
           >
             Why Collectors Choose{' '}
@@ -97,7 +97,8 @@ export default function WhyChooseUs() {
             <motion.div
               key={card.title}
               variants={cardVariants}
-              className="relative bg-white rounded-xl p-6 md:p-7 overflow-hidden group card-lift shadow-sm"
+              className="relative rounded-xl p-6 md:p-7 overflow-hidden group card-lift"
+              style={{ background: '#2D0A0A' }}
             >
               {/* Cyan top accent on hover */}
               <div
@@ -115,11 +116,11 @@ export default function WhyChooseUs() {
 
               <h3
                 className="font-display font-semibold mb-3 group-hover:text-[#D4AF37] transition-colors duration-300"
-                style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.2rem', color: '#162540' }}
+                style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.2rem', color: '#FFFFFF' }}
               >
                 {card.title}
               </h3>
-              <p className="font-sans text-[0.8125rem] leading-relaxed" style={{ color: 'rgba(22,37,64,0.55)' }}>
+              <p className="font-sans text-[0.8125rem] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 {card.description}
               </p>
 

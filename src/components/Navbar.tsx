@@ -43,14 +43,14 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled ? 'rgba(28,18,0,0.97)' : '#1C1200',
+          background: scrolled ? 'rgba(200,163,35,0.98)' : '#D4AF37',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: '1px solid rgba(212,175,55,0.2)',
-          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.4)' : 'none',
+          borderBottom: '1px solid rgba(255,255,255,0.2)',
+          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.2)' : 'none',
         }}
       >
-        {/* Gold top accent line */}
-        <div className="h-[3px] w-full" style={{ background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)' }} />
+        {/* Top accent line */}
+        <div className="h-[3px] w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)' }} />
 
         <div className="section-container">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -59,20 +59,20 @@ export default function Navbar() {
             <a href="/" className="flex items-center gap-3 group flex-shrink-0">
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[#D4AF37]/10"
-                style={{ border: '2px solid #D4AF37' }}
+                style={{ border: '2px solid rgba(255,255,255,0.8)' }}
               >
-                <span className="font-display font-bold text-lg leading-none" style={{ color: '#D4AF37', fontFamily: 'Montserrat Alternates, sans-serif' }}>
+                <span className="font-display font-bold text-lg leading-none" style={{ color: '#FFFFFF', fontFamily: 'Montserrat Alternates, sans-serif' }}>
                   V
                 </span>
               </div>
               <div className="flex flex-col leading-none">
                 <span
-                  className="font-display font-semibold text-xl tracking-wide text-white group-hover:text-[#D4AF37] transition-colors duration-300"
+                  className="font-display font-semibold text-xl tracking-wide text-white transition-colors duration-300"
                   style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}
                 >
                   VinayakArt
                 </span>
-                <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-[#D4AF37]/70 mt-0.5">
+                <span className="font-sans text-[9px] tracking-[0.3em] uppercase mt-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
                   Maharashtra's Finest
                 </span>
               </div>
@@ -84,10 +84,10 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-white/60 hover:text-[#D4AF37] transition-colors duration-300 group py-1"
+                  className="relative font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-white/80 hover:text-white transition-colors duration-300 group py-1"
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-300 bg-[#D4AF37] rounded-full" />
+                  <span className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-300 bg-white rounded-full" />
                 </a>
               ))}
             </nav>
@@ -96,7 +96,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2 md:gap-3">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="w-9 h-9 flex items-center justify-center text-white/60 hover:text-[#D4AF37] transition-colors duration-300"
+                className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white transition-colors duration-300"
                 aria-label="Search"
               >
                 <Search size={16} />
@@ -108,7 +108,7 @@ export default function Navbar() {
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-[#D4AF37] transition-colors duration-300"
-                    style={{ border: '1px solid rgba(28,184,210,0.2)' }}
+                    style={{ border: '1px solid rgba(255,255,255,0.4)' }}
                   >
                     <User size={14} />
                     <span className="max-w-[100px] truncate text-[11px] font-semibold tracking-[0.1em]">
@@ -156,14 +156,14 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white/70 hover:text-[#D4AF37] transition-colors duration-300"
+                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white hover:text-white/80 transition-colors duration-300"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     className="flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                    style={{ background: '#D4AF37', color: '#1C1200' }}
+                    style={{ background: '#FFFFFF', color: '#1C1200' }}
                   >
                     Register
                   </Link>
@@ -175,14 +175,14 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                style={{ background: '#D4AF37' }}
+                style={{ background: '#FFFFFF', color: '#1C1200' }}
               >
                 <MessageCircle size={13} />
                 WhatsApp
               </a>
 
               <button
-                className="lg:hidden w-9 h-9 flex items-center justify-center text-white/70 hover:text-[#D4AF37] transition-colors duration-300"
+                className="lg:hidden w-9 h-9 flex items-center justify-center text-white hover:text-white/80 transition-colors duration-300"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
               >
@@ -200,18 +200,18 @@ export default function Navbar() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="overflow-hidden border-t border-[rgba(28,184,210,0.15)]"
+              className="overflow-hidden border-t border-[rgba(255,255,255,0.25)]"
             >
               <div className="section-container py-3">
                 <div className="flex items-center gap-3">
-                  <Search size={14} className="text-[#D4AF37] flex-shrink-0" />
+                  <Search size={14} className="text-white flex-shrink-0" />
                   <input
                     type="text"
                     placeholder="Search sculptures, collections..."
                     autoFocus
                     className="flex-1 bg-transparent font-sans text-sm text-white placeholder-white/30 outline-none"
                   />
-                  <button onClick={() => setSearchOpen(false)} className="text-white/40 hover:text-[#D4AF37] transition-colors">
+                  <button onClick={() => setSearchOpen(false)} className="text-white/60 hover:text-white transition-colors">
                     <X size={14} />
                   </button>
                 </div>

@@ -260,7 +260,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 export default function ProductShowcase() {
   const { user } = useAuth()
   const [activeFilter, setActiveFilter] = useState('All')
-  const [products, setProducts] = useState<Product[]>(fallbackProducts)
+  const products = fallbackProducts
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [step, setStep] = useState<CheckoutStep>('details')
   const [buyer, setBuyer] = useState({ name: '', email: '', phone: '' })

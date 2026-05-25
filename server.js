@@ -55,7 +55,9 @@ app.use(
         return;
       }
 
-      callback(new Error(`CORS blocked origin: ${origin}`));
+      const err = new Error(`CORS blocked origin: ${origin}`);
+      err.status = 403;
+      callback(err);
     },
     credentials: true,
   }),

@@ -43,10 +43,11 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled ? 'rgba(200,163,35,0.98)' : '#D4AF37',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          backgroundImage: 'url(/images/gold-texture.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderBottom: '1px solid rgba(255,255,255,0.2)',
-          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.2)' : 'none',
+          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.25)' : '0 2px 12px rgba(0,0,0,0.15)',
         }}
       >
         {/* Top accent line */}
@@ -56,25 +57,16 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 md:h-20">
 
             {/* Logo */}
-            <a href="/" className="flex items-center gap-3 group flex-shrink-0">
+            <a href="/" className="flex items-center group flex-shrink-0">
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[#D4AF37]/10"
-                style={{ border: '2px solid rgba(255,255,255,0.8)' }}
+                className="px-3 py-1.5 rounded-md transition-opacity duration-300 group-hover:opacity-90"
+                style={{ background: '#7B1818' }}
               >
-                <span className="font-display font-bold text-lg leading-none" style={{ color: '#FFFFFF', fontFamily: 'Montserrat Alternates, sans-serif' }}>
-                  V
-                </span>
-              </div>
-              <div className="flex flex-col leading-none">
-                <span
-                  className="font-display font-semibold text-xl tracking-wide text-white transition-colors duration-300"
-                  style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}
-                >
-                  VinayakArt
-                </span>
-                <span className="font-sans text-[9px] tracking-[0.3em] uppercase mt-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                  Maharashtra's Finest
-                </span>
+                <img
+                  src="/images/logo-light.png"
+                  alt="Vinayak Art Studio"
+                  className="h-10 md:h-12 w-auto object-contain"
+                />
               </div>
             </a>
 
@@ -84,7 +76,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-white/80 hover:text-white transition-colors duration-300 group py-1"
+                  className="relative font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white/90 hover:text-white transition-colors duration-300 group py-1"
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-300 bg-white rounded-full" />
@@ -156,13 +148,14 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white hover:text-white/80 transition-colors duration-300"
+                    className="flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase transition-all duration-300 rounded-sm"
+                    style={{ background: '#FFFFFF', color: '#1C1200' }}
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
+                    className="flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
                     style={{ background: '#FFFFFF', color: '#1C1200' }}
                   >
                     Register
@@ -174,7 +167,7 @@ export default function Navbar() {
                 href="https://wa.me/919876543210"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
+                className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
                 style={{ background: '#FFFFFF', color: '#1C1200' }}
               >
                 <MessageCircle size={13} />
@@ -242,9 +235,7 @@ export default function Navbar() {
               style={{ background: '#1C1200', borderLeft: '2px solid #D4AF37' }}
             >
               <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(28,184,210,0.15)]">
-                <span className="font-display text-xl text-white" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
-                  VinayakArt
-                </span>
+                <img src="/images/logo-light.png" alt="Vinayak Art Studio" className="h-9 w-auto object-contain" />
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#D4AF37] transition-colors"

@@ -52,6 +52,13 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
+        {/* Logo stamp */}
+        <motion.div variants={itemVariants} className="mb-8 flex justify-center">
+          <div className="rounded-xl" style={{ background: 'rgba(255,255,255,0.95)', boxShadow: '0 4px 24px rgba(0,0,0,0.35)' }}>
+            <img src="/images/logo-cropped.png" alt="Vinayak Art Studio" className="h-16 md:h-20 w-auto object-contain" />
+          </div>
+        </motion.div>
+
         {/* Overline label */}
         <motion.div variants={itemVariants} className="mb-6 flex justify-center">
           <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase text-white px-4 py-1.5 rounded-full" style={{ background: 'rgba(28,184,210,0.85)', border: '1px solid rgba(28,184,210,0.5)' }}>

@@ -40,23 +40,12 @@ export default function Footer() {
 
             {/* Brand column */}
             <div className="md:col-span-3">
-              <div className="flex items-center gap-3 mb-5">
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ border: '2px solid #D4AF37' }}
-                >
-                  <span className="font-display font-bold text-lg leading-none" style={{ color: '#D4AF37', fontFamily: 'Montserrat Alternates, sans-serif' }}>
-                    V
-                  </span>
-                </div>
-                <div>
-                  <span className="font-display font-semibold text-xl block" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#1C1200' }}>
-                    VinayakArt
-                  </span>
-                  <span className="font-sans text-[9px] tracking-[0.25em] uppercase" style={{ color: '#D4AF37' }}>
-                    Maharashtra's Finest
-                  </span>
-                </div>
+              <div className="mb-5">
+                <img
+                  src="/images/logo-cropped.png"
+                  alt="Vinayak Art Studio"
+                  className="h-14 w-auto object-contain"
+                />
               </div>
 
               <p className="font-sans text-[0.8125rem] leading-relaxed mb-6" style={{ color: 'rgba(28,8,0,0.5)' }}>

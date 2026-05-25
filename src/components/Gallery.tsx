@@ -2,26 +2,15 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const images = [
-  { src: '/images/gallery/g01.jpg', alt: 'Shivaji Maharaj on Horseback' },
-  { src: '/images/gallery/g02.jpg', alt: 'Shivaji Maharaj Seated' },
-  { src: '/images/gallery/g03.jpg', alt: 'Shivaji Maharaj Standing' },
-  { src: '/images/gallery/g04.jpg', alt: 'Shivaji Maharaj Full Figure' },
-  { src: '/images/gallery/g05.jpg', alt: 'Swami Samarth' },
-  { src: '/images/gallery/g06.jpg', alt: 'Shivaji Ganesha Bust' },
-  { src: '/images/gallery/g07.jpg', alt: 'Vitthal Statue' },
-  { src: '/images/gallery/g08.jpg', alt: 'Shiva Gold' },
-  { src: '/images/gallery/g09.jpg', alt: 'Dattatreya Brass' },
-  { src: '/images/gallery/g10.jpg', alt: 'Vitthal Temple' },
-  { src: '/images/gallery/g11.jpg', alt: 'Swami Samarth Banyan' },
-  { src: '/images/gallery/g12.jpg', alt: 'Shiva Black Stone' },
-  { src: '/images/gallery/g13.jpg', alt: 'Bronze Warrior' },
-  { src: '/images/gallery/g14.jpg', alt: 'Bronze Dancer' },
-  { src: '/images/gallery/g15.jpg', alt: 'Ganesha Playing' },
-  { src: '/images/gallery/g16.jpg', alt: 'Vitthal Pair' },
-  { src: '/images/gallery/g17.jpg', alt: 'Baby Ganesha' },
-  { src: '/images/gallery/g18.jpg', alt: 'Shivaji Copper Horse' },
-  { src: '/images/gallery/g19.jpg', alt: 'Shivaji Gold Horse' },
-  { src: '/images/gallery/g20.jpg', alt: 'Bronze Figure' },
+  { src: '/images/gallery/chatrapathi shivaji maharaj on a horse.jpeg', alt: 'Chhatrapati Shivaji Maharaj on Horseback' },
+  { src: '/images/gallery/chatrapathi shivaji maharaj.jpeg', alt: 'Chhatrapati Shivaji Maharaj' },
+  { src: '/images/gallery/golden chatrapthi shivaji maharaj.jpeg', alt: 'Golden Chhatrapati Shivaji Maharaj' },
+  { src: '/images/gallery/swami samarth.jpeg', alt: 'Swami Samarth' },
+  { src: '/images/gallery/swami samarth sitting.jpeg', alt: 'Swami Samarth Seated' },
+  { src: '/images/gallery/golden shiva statue.jpeg', alt: 'Golden Shiva Statue' },
+  { src: '/images/gallery/shiva black statue.jpeg', alt: 'Shiva Black Stone Statue' },
+  { src: '/images/gallery/dattatreya brass statue.jpeg', alt: 'Dattatreya Brass Statue' },
+  { src: '/images/gallery/1.jpeg', alt: 'Handcrafted Sculpture' },
 ]
 
 export default function Gallery() {

@@ -456,7 +456,7 @@ export default function ProductShowcase() {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
         >
-          <div className="divider-cyan mb-8" />
+          <div className="mb-8" style={{ height: '2px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }} />
           <a href="#contact" className="btn-ghost">
             Request the Full Catalogue
           </a>

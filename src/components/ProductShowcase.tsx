@@ -85,8 +85,8 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
       transition={{ duration: 0.4 }}
       className="group relative overflow-hidden card-lift rounded-xl"
       style={{
-        background: '#1D3050',
-        border: '1px solid rgba(28,184,210,0.12)',
+        background: '#3D1010',
+        border: '1px solid rgba(201,168,76,0.15)',
       }}
     >
       <div className="relative overflow-hidden aspect-[4/5]">
@@ -97,7 +97,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
           loading="lazy"
           style={{ filter: 'brightness(0.8) contrast(1.05)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1D3050] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2D0A0A] via-transparent to-transparent" />
 
         {product.badge && (
           <div className="absolute top-3 left-3 z-10">
@@ -113,7 +113,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         <button
           onClick={() => setWishlisted(!wishlisted)}
           className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 rounded-full"
-          style={{ background: 'rgba(22,37,64,0.8)', border: '1px solid rgba(28,184,210,0.3)' }}
+          style={{ background: 'rgba(45,10,10,0.8)', border: '1px solid rgba(201,168,76,0.3)' }}
           aria-label="Add to wishlist"
         >
           <Heart
@@ -124,7 +124,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 
         <div
           className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex items-center justify-between px-4 py-3 z-10"
-          style={{ background: 'rgba(22,37,64,0.95)', borderTop: '1px solid rgba(28,184,210,0.2)' }}
+          style={{ background: 'rgba(45,10,10,0.95)', borderTop: '1px solid rgba(201,168,76,0.2)' }}
         >
           <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#1CB8D2]">
             {product.dimensions}
@@ -271,7 +271,7 @@ export default function ProductShowcase() {
     <section
       id="sculptures"
       className="py-20 md:py-28"
-      style={{ background: '#162540' }}
+      style={{ background: '#2D0A0A' }}
       aria-label="Featured Sculptures"
     >
       <div className="section-container" ref={ref}>
@@ -309,7 +309,7 @@ export default function ProductShowcase() {
               style={{
                 color: activeFilter === filter ? '#FFFFFF' : 'rgba(255,255,255,0.45)',
                 background: activeFilter === filter ? '#1CB8D2' : 'transparent',
-                border: activeFilter === filter ? 'none' : '1px solid rgba(28,184,210,0.2)',
+                border: activeFilter === filter ? 'none' : '1px solid rgba(201,168,76,0.2)',
                 borderRadius: '6px',
               }}
             >
@@ -378,7 +378,7 @@ export default function ProductShowcase() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             className="w-full max-w-md rounded-2xl shadow-2xl my-auto"
-            style={{ background: '#1D3050', border: '2px solid rgba(28,184,210,0.3)' }}
+            style={{ background: '#3D1010', border: '2px solid rgba(201,168,76,0.3)' }}
           >
             {/* Header — always visible */}
             <div className="flex items-start justify-between gap-4 p-6 pb-4 border-b border-[rgba(28,184,210,0.12)]">

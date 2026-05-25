@@ -43,14 +43,14 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled ? 'rgba(22,37,64,0.97)' : '#162540',
+          background: scrolled ? 'rgba(28,18,0,0.97)' : '#1C1200',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: '1px solid rgba(28,184,210,0.12)',
-          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.3)' : 'none',
+          borderBottom: '1px solid rgba(201,168,76,0.2)',
+          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.4)' : 'none',
         }}
       >
-        {/* Cyan top accent line */}
-        <div className="h-[3px] w-full" style={{ background: 'linear-gradient(90deg, transparent, #1CB8D2, transparent)' }} />
+        {/* Gold top accent line */}
+        <div className="h-[3px] w-full" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
 
         <div className="section-container">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -58,21 +58,21 @@ export default function Navbar() {
             {/* Logo */}
             <a href="/" className="flex items-center gap-3 group flex-shrink-0">
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[#1CB8D2]/10"
-                style={{ border: '2px solid #1CB8D2' }}
+                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[#C9A84C]/10"
+                style={{ border: '2px solid #C9A84C' }}
               >
-                <span className="font-display font-bold text-lg leading-none" style={{ color: '#1CB8D2', fontFamily: 'Montserrat Alternates, sans-serif' }}>
+                <span className="font-display font-bold text-lg leading-none" style={{ color: '#C9A84C', fontFamily: 'Montserrat Alternates, sans-serif' }}>
                   V
                 </span>
               </div>
               <div className="flex flex-col leading-none">
                 <span
-                  className="font-display font-semibold text-xl tracking-wide text-white group-hover:text-[#1CB8D2] transition-colors duration-300"
+                  className="font-display font-semibold text-xl tracking-wide text-white group-hover:text-[#C9A84C] transition-colors duration-300"
                   style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}
                 >
                   VinayakArt
                 </span>
-                <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-[#1CB8D2]/70 mt-0.5">
+                <span className="font-sans text-[9px] tracking-[0.3em] uppercase text-[#C9A84C]/70 mt-0.5">
                   Maharashtra's Finest
                 </span>
               </div>
@@ -84,10 +84,10 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-white/60 hover:text-[#1CB8D2] transition-colors duration-300 group py-1"
+                  className="relative font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-white/60 hover:text-[#C9A84C] transition-colors duration-300 group py-1"
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-300 bg-[#1CB8D2] rounded-full" />
+                  <span className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-300 bg-[#C9A84C] rounded-full" />
                 </a>
               ))}
             </nav>
@@ -96,7 +96,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2 md:gap-3">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="w-9 h-9 flex items-center justify-center text-white/60 hover:text-[#1CB8D2] transition-colors duration-300"
+                className="w-9 h-9 flex items-center justify-center text-white/60 hover:text-[#C9A84C] transition-colors duration-300"
                 aria-label="Search"
               >
                 <Search size={16} />
@@ -107,7 +107,7 @@ export default function Navbar() {
                 <div className="relative hidden md:block">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-[#1CB8D2] transition-colors duration-300"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-[#C9A84C] transition-colors duration-300"
                     style={{ border: '1px solid rgba(28,184,210,0.2)' }}
                   >
                     <User size={14} />
@@ -126,7 +126,7 @@ export default function Navbar() {
                           exit={{ opacity: 0, y: -8, scale: 0.95 }}
                           transition={{ duration: 0.15 }}
                           className="absolute right-0 top-full mt-2 w-48 rounded-xl overflow-hidden z-[70]"
-                          style={{ background: '#1D3050', border: '1px solid rgba(28,184,210,0.25)', boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
+                          style={{ background: '#2A1C00', border: '1px solid rgba(201,168,76,0.25)', boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
                         >
                           <div className="px-4 py-3 border-b border-[rgba(28,184,210,0.1)]">
                             <p className="text-white text-xs font-semibold truncate">{user.name}</p>
@@ -135,7 +135,7 @@ export default function Navbar() {
                           <Link
                             to="/account"
                             onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-3 text-sm text-white/70 hover:text-[#1CB8D2] hover:bg-[rgba(28,184,210,0.08)] transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-3 text-sm text-white/70 hover:text-[#C9A84C] hover:bg-[rgba(28,184,210,0.08)] transition-colors"
                           >
                             <User size={13} />
                             My Account
@@ -156,14 +156,14 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white/70 hover:text-[#1CB8D2] transition-colors duration-300"
+                    className="px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white/70 hover:text-[#C9A84C] transition-colors duration-300"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     className="flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                    style={{ background: '#1CB8D2', color: '#162540' }}
+                    style={{ background: '#C9A84C', color: '#1C1200' }}
                   >
                     Register
                   </Link>
@@ -175,14 +175,14 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                style={{ background: '#1CB8D2' }}
+                style={{ background: '#C9A84C' }}
               >
                 <MessageCircle size={13} />
                 WhatsApp
               </a>
 
               <button
-                className="lg:hidden w-9 h-9 flex items-center justify-center text-white/70 hover:text-[#1CB8D2] transition-colors duration-300"
+                className="lg:hidden w-9 h-9 flex items-center justify-center text-white/70 hover:text-[#C9A84C] transition-colors duration-300"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
               >
@@ -204,14 +204,14 @@ export default function Navbar() {
             >
               <div className="section-container py-3">
                 <div className="flex items-center gap-3">
-                  <Search size={14} className="text-[#1CB8D2] flex-shrink-0" />
+                  <Search size={14} className="text-[#C9A84C] flex-shrink-0" />
                   <input
                     type="text"
                     placeholder="Search sculptures, collections..."
                     autoFocus
                     className="flex-1 bg-transparent font-sans text-sm text-white placeholder-white/30 outline-none"
                   />
-                  <button onClick={() => setSearchOpen(false)} className="text-white/40 hover:text-[#1CB8D2] transition-colors">
+                  <button onClick={() => setSearchOpen(false)} className="text-white/40 hover:text-[#C9A84C] transition-colors">
                     <X size={14} />
                   </button>
                 </div>
@@ -239,7 +239,7 @@ export default function Navbar() {
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="fixed top-0 right-0 bottom-0 z-[80] w-80 flex flex-col"
-              style={{ background: '#162540', borderLeft: '2px solid #1CB8D2' }}
+              style={{ background: '#1C1200', borderLeft: '2px solid #C9A84C' }}
             >
               <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(28,184,210,0.15)]">
                 <span className="font-display text-xl text-white" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
@@ -247,7 +247,7 @@ export default function Navbar() {
                 </span>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#1CB8D2] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#C9A84C] transition-colors"
                 >
                   <X size={18} />
                 </button>
@@ -270,7 +270,7 @@ export default function Navbar() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 * i + 0.1 }}
-                    className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-white/70 hover:text-[#1CB8D2] transition-colors group border-b border-white/5"
+                    className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-white/70 hover:text-[#C9A84C] transition-colors group border-b border-white/5"
                   >
                     {link.label}
                     <ChevronRight size={14} className="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -281,7 +281,7 @@ export default function Navbar() {
                   <Link
                     to="/account"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#1CB8D2] transition-colors group border-b border-white/5"
+                    className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#C9A84C] transition-colors group border-b border-white/5"
                   >
                     My Account
                     <ChevronRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -291,7 +291,7 @@ export default function Navbar() {
                     <Link
                       to="/login"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-white/70 hover:text-[#1CB8D2] transition-colors group border-b border-white/5"
+                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-white/70 hover:text-[#C9A84C] transition-colors group border-b border-white/5"
                     >
                       Login
                       <ChevronRight size={14} className="opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -299,7 +299,7 @@ export default function Navbar() {
                     <Link
                       to="/register"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#1CB8D2] transition-colors group border-b border-white/5"
+                      className="flex items-center justify-between py-3.5 font-sans text-sm font-semibold tracking-[0.12em] uppercase text-[#C9A84C] transition-colors group border-b border-white/5"
                     >
                       Create Account
                       <ChevronRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -324,7 +324,7 @@ export default function Navbar() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 py-3 font-sans text-xs font-semibold tracking-[0.15em] uppercase text-white rounded-sm"
-                  style={{ background: '#1CB8D2' }}
+                  style={{ background: '#C9A84C' }}
                 >
                   <MessageCircle size={14} />
                   Chat on WhatsApp

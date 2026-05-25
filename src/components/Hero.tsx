@@ -26,14 +26,14 @@ export default function Hero() {
       aria-label="Hero section"
       style={{ background: '#0a0a0a' }}
     >
-      {/* Gold texture background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url(/images/gold-bg.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+      {/* Video background */}
+      <video
+        className="absolute inset-0 z-0 w-full h-full object-cover"
+        src="/InShot_20260524_225044074.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
       />
       {/* Dark overlay to keep text readable */}
       <div className="absolute inset-0 z-0" style={{ background: 'rgba(10,8,4,0.55)' }} />

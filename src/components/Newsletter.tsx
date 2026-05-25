@@ -93,7 +93,7 @@ export default function Newsletter() {
         {/* Left panel â€” dark */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
-          style={{ background: '#2D0A0A' }}
+          style={{ background: '#6B0000' }}
         >
           <div className="section-label mb-6">Speak with a Curator</div>
           <h2

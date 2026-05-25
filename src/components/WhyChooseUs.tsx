@@ -98,7 +98,7 @@ export default function WhyChooseUs() {
               key={card.title}
               variants={cardVariants}
               className="relative rounded-xl p-6 md:p-7 overflow-hidden group card-lift"
-              style={{ background: '#2D0A0A' }}
+              style={{ background: '#6B0000' }}
             >
               {/* Cyan top accent on hover */}
               <div

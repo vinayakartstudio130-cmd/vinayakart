@@ -58,7 +58,7 @@ export default function Testimonials() {
     <section
       id="testimonials"
       className="py-20 md:py-28 overflow-hidden"
-      style={{ background: '#2D0A0A' }}
+      style={{ background: '#6B0000' }}
       aria-label="Client Testimonials"
     >
       <div className="section-container" ref={ref}>

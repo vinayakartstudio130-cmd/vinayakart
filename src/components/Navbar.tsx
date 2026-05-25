@@ -60,7 +60,7 @@ export default function Navbar() {
             <a href="/" className="flex items-center group flex-shrink-0">
               <div
                 className="px-3 py-1.5 rounded-md transition-opacity duration-300 group-hover:opacity-90"
-                style={{ background: '#7B1818' }}
+                style={{ background: '#6B0000' }}
               >
                 <img
                   src="/images/logo-light.png"
@@ -118,7 +118,7 @@ export default function Navbar() {
                           exit={{ opacity: 0, y: -8, scale: 0.95 }}
                           transition={{ duration: 0.15 }}
                           className="absolute right-0 top-full mt-2 w-48 rounded-xl overflow-hidden z-[70]"
-                          style={{ background: '#2A1C00', border: '1px solid rgba(212,175,55,0.25)', boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
+                          style={{ background: '#3D0000', border: '1px solid rgba(212,175,55,0.25)', boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
                         >
                           <div className="px-4 py-3 border-b border-[rgba(28,184,210,0.1)]">
                             <p className="text-white text-xs font-semibold truncate">{user.name}</p>
@@ -149,14 +149,14 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     className="flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase transition-all duration-300 rounded-sm"
-                    style={{ background: '#FFFFFF', color: '#1C1200' }}
+                    style={{ background: '#FFFFFF', color: '#3D0000' }}
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     className="flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                    style={{ background: '#FFFFFF', color: '#1C1200' }}
+                    style={{ background: '#FFFFFF', color: '#3D0000' }}
                   >
                     Register
                   </Link>
@@ -168,7 +168,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
-                style={{ background: '#FFFFFF', color: '#1C1200' }}
+                style={{ background: '#FFFFFF', color: '#3D0000' }}
               >
                 <MessageCircle size={13} />
                 WhatsApp
@@ -232,7 +232,7 @@ export default function Navbar() {
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="fixed top-0 right-0 bottom-0 z-[80] w-80 flex flex-col"
-              style={{ background: '#1C1200', borderLeft: '2px solid #D4AF37' }}
+              style={{ background: '#3D0000', borderLeft: '2px solid #D4AF37' }}
             >
               <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(28,184,210,0.15)]">
                 <img src="/images/logo-light.png" alt="Vinayak Art Studio" className="h-9 w-auto object-contain" />

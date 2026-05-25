@@ -137,7 +137,7 @@ body {
 
 /* ─── Utility: Dark Button ───────────────────────────────────────── */
 .btn-dark {
-  background: #2D0A0A;
+  background: #6B0000;
   color: #FFFFFF;
   font-family: var(--font-sans);
   font-weight: 600;
@@ -232,7 +232,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #7B1818;
+  color: #6B0000;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -242,7 +242,7 @@ body {
   display: inline-block;
   width: 2rem;
   height: 2px;
-  background: #7B1818;
+  background: #6B0000;
   flex-shrink: 0;
   border-radius: 2px;
 }

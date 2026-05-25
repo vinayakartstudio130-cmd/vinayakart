@@ -183,7 +183,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
           loading="lazy"
           style={{ filter: 'brightness(0.8) contrast(1.05)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2D0A0A] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#6B0000] via-transparent to-transparent" />
 
         {product.badge && (
           <div className="absolute top-3 left-3 z-10">
@@ -348,7 +348,7 @@ export default function ProductShowcase() {
     <section
       id="sculptures"
       className="py-20 md:py-28"
-      style={{ background: '#2D0A0A' }}
+      style={{ background: '#6B0000' }}
       aria-label="Featured Sculptures"
     >
       <div className="section-container" ref={ref}>

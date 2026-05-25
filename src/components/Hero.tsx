@@ -54,7 +54,7 @@ export default function Hero() {
       >
         {/* Overline label */}
         <motion.div variants={itemVariants} className="mb-6 flex justify-center">
-          <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.95)', color: '#7B1818' }}>
+          <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.95)', color: '#6B0000' }}>
             Maharashtra's Finest
           </span>
         </motion.div>
@@ -106,7 +106,7 @@ export default function Hero() {
       >
         <div
           className="grid grid-cols-2 md:grid-cols-4"
-          style={{ background: '#2D0A0A' }}
+          style={{ background: '#6B0000' }}
         >
           {stats.map((stat, i) => (
             <div

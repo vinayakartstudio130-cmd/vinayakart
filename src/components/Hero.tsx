@@ -106,7 +106,7 @@ export default function Hero() {
       >
         <div
           className="grid grid-cols-2 md:grid-cols-4"
-          style={{ background: '#162540' }}
+          style={{ background: '#2D0A0A' }}
         >
           {stats.map((stat, i) => (
             <div
@@ -116,8 +116,9 @@ export default function Hero() {
               } ${i >= 2 ? 'border-t border-white/10 md:border-t-0' : ''}`}
             >
               <span
-                className="font-display font-bold mb-1 text-[#1CB8D2]"
+                className="font-display font-bold mb-1"
                 style={{
+                  color: '#D4AF37',
                   fontFamily: 'Montserrat Alternates, sans-serif',
                   fontSize: 'clamp(1.4rem, 3vw, 2rem)',
                 }}

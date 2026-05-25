@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
     <section
       id="about"
       className="py-20 md:py-28 overflow-hidden"
-      style={{ background: '#E0EBF4' }}
+      style={{ background: '#2D0A0A' }}
       aria-label="Why Collectors Choose VinayakArt"
     >
       <div className="section-container" ref={ref}>
@@ -78,11 +78,11 @@ export default function WhyChooseUs() {
             style={{
               fontFamily: 'Montserrat Alternates, sans-serif',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
-              color: '#162540',
+              color: '#FFFFFF',
             }}
           >
             Why Collectors Choose{' '}
-            <span className="font-semibold" style={{ color: '#1CB8D2' }}>VinayakArt</span>
+            <span className="font-semibold" style={{ color: '#D4AF37' }}>VinayakArt</span>
           </h2>
         </motion.div>
 
@@ -102,19 +102,19 @@ export default function WhyChooseUs() {
               {/* Cyan top accent on hover */}
               <div
                 className="absolute top-0 left-0 right-0 h-1 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-t-xl"
-                style={{ background: '#1CB8D2' }}
+                style={{ background: '#D4AF37' }}
               />
 
               {/* Icon */}
               <div
-                className="w-11 h-11 flex items-center justify-center mb-5 rounded-lg transition-all duration-300 group-hover:bg-[#1CB8D2]"
-                style={{ background: 'rgba(28,184,210,0.1)', border: '1px solid rgba(28,184,210,0.2)' }}
+                className="w-11 h-11 flex items-center justify-center mb-5 rounded-lg transition-all duration-300 group-hover:bg-[#D4AF37]"
+                style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.2)' }}
               >
-                <card.icon size={18} className="transition-colors duration-300 group-hover:text-white" style={{ color: '#1CB8D2' }} />
+                <card.icon size={18} className="transition-colors duration-300 group-hover:text-white" style={{ color: '#D4AF37' }} />
               </div>
 
               <h3
-                className="font-display font-semibold mb-3 group-hover:text-[#1CB8D2] transition-colors duration-300"
+                className="font-display font-semibold mb-3 group-hover:text-[#D4AF37] transition-colors duration-300"
                 style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.2rem', color: '#162540' }}
               >
                 {card.title}
@@ -129,7 +129,7 @@ export default function WhyChooseUs() {
                   <div
                     key={d}
                     className="w-1.5 h-1.5 rounded-full transition-all duration-300"
-                    style={{ background: d === 0 ? '#1CB8D2' : 'rgba(28,184,210,0.2)' }}
+                    style={{ background: d === 0 ? '#D4AF37' : 'rgba(212,175,55,0.2)' }}
                   />
                 ))}
               </div>

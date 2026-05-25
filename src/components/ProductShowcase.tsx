@@ -166,7 +166,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
       className="group relative overflow-hidden card-lift rounded-xl"
       style={{
         background: '#3D1010',
-        border: '1px solid rgba(201,168,76,0.15)',
+        border: '1px solid rgba(212,175,55,0.15)',
       }}
     >
       <div className="relative overflow-hidden aspect-[4/5]">
@@ -193,7 +193,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         <button
           onClick={() => setWishlisted(!wishlisted)}
           className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 rounded-full"
-          style={{ background: 'rgba(45,10,10,0.8)', border: '1px solid rgba(201,168,76,0.3)' }}
+          style={{ background: 'rgba(45,10,10,0.8)', border: '1px solid rgba(212,175,55,0.3)' }}
           aria-label="Add to wishlist"
         >
           <Heart
@@ -204,7 +204,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 
         <div
           className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex items-center justify-between px-4 py-3 z-10"
-          style={{ background: 'rgba(45,10,10,0.95)', borderTop: '1px solid rgba(201,168,76,0.2)' }}
+          style={{ background: 'rgba(45,10,10,0.95)', borderTop: '1px solid rgba(212,175,55,0.2)' }}
         >
           <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#1CB8D2]">
             {product.dimensions}
@@ -231,13 +231,13 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
         </h3>
         <div className="flex items-center justify-between gap-3">
           <span
-            className="font-display font-bold cyan-text"
+            className="font-display font-bold text-white"
             style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.25rem' }}
           >
             {currency.format(product.price)}
           </span>
           <button
-            className="flex items-center gap-1.5 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-[#1CB8D2] hover:text-white transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 font-sans text-[10px] font-semibold tracking-[0.15em] uppercase text-white hover:text-[#D4AF37] transition-colors disabled:opacity-40"
             aria-label={`Buy ${product.name}`}
             disabled={product.stock <= 0}
             onClick={() => onBuy(product)}
@@ -387,9 +387,9 @@ export default function ProductShowcase() {
               onClick={() => setActiveFilter(filter)}
               className="relative px-5 py-2 font-sans text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
               style={{
-                color: activeFilter === filter ? '#FFFFFF' : 'rgba(255,255,255,0.45)',
-                background: activeFilter === filter ? '#1CB8D2' : 'transparent',
-                border: activeFilter === filter ? 'none' : '1px solid rgba(201,168,76,0.2)',
+                color: activeFilter === filter ? '#1C1200' : 'rgba(255,255,255,0.45)',
+                background: activeFilter === filter ? '#D4AF37' : 'transparent',
+                border: activeFilter === filter ? 'none' : '1px solid rgba(212,175,55,0.2)',
                 borderRadius: '6px',
               }}
             >
@@ -458,7 +458,7 @@ export default function ProductShowcase() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             className="w-full max-w-md rounded-2xl shadow-2xl my-auto"
-            style={{ background: '#3D1010', border: '2px solid rgba(201,168,76,0.3)' }}
+            style={{ background: '#3D1010', border: '2px solid rgba(212,175,55,0.3)' }}
           >
             {/* Header — always visible */}
             <div className="flex items-start justify-between gap-4 p-6 pb-4 border-b border-[rgba(28,184,210,0.12)]">

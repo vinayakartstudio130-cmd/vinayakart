@@ -261,7 +261,7 @@ body {
 }
 .card-lift:hover {
   transform: translateY(-6px);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.25), 0 0 0 2px var(--cyan);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25), 0 0 0 2px #D4AF37;
 }
 
 /* ─── Section Container ──────────────────────────────────────────── */

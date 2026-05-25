@@ -264,7 +264,7 @@ export default function AdminPanel() {
   if (!isLoggedIn) {
     return (
       <main className="min-h-screen bg-[#0d0d0d] px-6 py-16 text-[#F5F0E8]">
-        <section className="mx-auto max-w-md border border-[#C9A84C]/20 bg-[#141210] p-8">
+        <section className="mx-auto max-w-md border border-[#D4AF37]/20 bg-[#141210] p-8">
           <p className="section-label mb-5">Private Access</p>
           <h1 className="mb-3 font-display text-4xl">Admin Login</h1>
           <p className="mb-8 text-sm text-[#F5F0E8]/50">
@@ -282,7 +282,7 @@ export default function AdminPanel() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="Admin email"
-              className="w-full border border-[#C9A84C]/20 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+              className="w-full border border-[#D4AF37]/20 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
               required
             />
             <input
@@ -290,7 +290,7 @@ export default function AdminPanel() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Password"
-              className="w-full border border-[#C9A84C]/20 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+              className="w-full border border-[#D4AF37]/20 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
               required
             />
             <button className="btn-gold w-full justify-center" disabled={isBusy}>
@@ -304,7 +304,7 @@ export default function AdminPanel() {
 
   return (
     <main className="min-h-screen bg-[#0d0d0d] text-[#F5F0E8]">
-      <header className="border-b border-[#C9A84C]/15 bg-[#0a0a0a] px-6 py-5">
+      <header className="border-b border-[#D4AF37]/15 bg-[#0a0a0a] px-6 py-5">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div>
             <p className="section-label mb-2">VinayakArt</p>
@@ -321,8 +321,8 @@ export default function AdminPanel() {
         {summary && (
           <div className="mb-8 grid gap-4 md:grid-cols-4">
             {summaryCards.map(([label, key, Icon]) => (
-              <div key={label} className="border border-[#C9A84C]/15 bg-[#141210] p-5">
-                <Icon size={18} className="mb-4 text-[#C9A84C]" />
+              <div key={label} className="border border-[#D4AF37]/15 bg-[#141210] p-5">
+                <Icon size={18} className="mb-4 text-[#D4AF37]" />
                 <p className="text-3xl font-semibold">{summary[key]}</p>
                 <p className="text-xs uppercase tracking-[0.18em] text-[#F5F0E8]/40">{String(label)}</p>
               </div>
@@ -341,8 +341,8 @@ export default function AdminPanel() {
               onClick={() => setActiveTab(tab as typeof activeTab)}
               className={`px-5 py-3 text-xs uppercase tracking-[0.16em] ${
                 activeTab === tab
-                  ? 'bg-[#C9A84C] text-[#0a0a0a]'
-                  : 'border border-[#C9A84C]/20 text-[#C9A84C]'
+                  ? 'bg-[#D4AF37] text-[#0a0a0a]'
+                  : 'border border-[#D4AF37]/20 text-[#D4AF37]'
               }`}
             >
               {label}
@@ -365,7 +365,7 @@ export default function AdminPanel() {
           <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
             <form
               onSubmit={handleProductSubmit}
-              className="h-fit border border-[#C9A84C]/15 bg-[#141210] p-5"
+              className="h-fit border border-[#D4AF37]/15 bg-[#141210] p-5"
             >
               <h2 className="mb-5 font-display text-2xl">
                 {editingId ? 'Edit Product' : 'Add Product'}
@@ -392,7 +392,7 @@ export default function AdminPanel() {
                     }
                     placeholder={label}
                     type={key === 'price' || key === 'stock' ? 'number' : 'text'}
-                    className="w-full border border-[#C9A84C]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
                     required={['name', 'material', 'category', 'price', 'image'].includes(key)}
                   />
                 ))}
@@ -404,7 +404,7 @@ export default function AdminPanel() {
                       badgeColor: event.target.value,
                     }))
                   }
-                  className="w-full border border-[#C9A84C]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                  className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
                 >
                   <option value="gold">Gold badge</option>
                   <option value="red">Red badge</option>
@@ -428,7 +428,7 @@ export default function AdminPanel() {
               {products.map((product) => (
                 <article
                   key={product._id}
-                  className="grid gap-4 border border-[#C9A84C]/15 bg-[#141210] p-4 md:grid-cols-[120px_1fr_auto]"
+                  className="grid gap-4 border border-[#D4AF37]/15 bg-[#141210] p-4 md:grid-cols-[120px_1fr_auto]"
                 >
                   <img src={product.image} alt="" className="h-28 w-full object-cover md:w-28" />
                   <div>
@@ -436,7 +436,7 @@ export default function AdminPanel() {
                     <p className="text-sm text-[#F5F0E8]/50">
                       {product.material} | {product.category} | Stock {product.stock}
                     </p>
-                    <p className="mt-2 text-[#C9A84C]">{currency.format(product.price)}</p>
+                    <p className="mt-2 text-[#D4AF37]">{currency.format(product.price)}</p>
                   </div>
                   <div className="flex gap-2 md:flex-col">
                     <button onClick={() => editProduct(product)} className="btn-ghost-gold">
@@ -455,7 +455,7 @@ export default function AdminPanel() {
         {activeTab === 'enquiries' && (
           <div className="grid gap-4">
             {enquiries.map((enquiry) => (
-              <article key={enquiry._id} className="border border-[#C9A84C]/15 bg-[#141210] p-5">
+              <article key={enquiry._id} className="border border-[#D4AF37]/15 bg-[#141210] p-5">
                 <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <h3 className="font-display text-2xl">{enquiry.name}</h3>
@@ -468,7 +468,7 @@ export default function AdminPanel() {
                     onChange={(event) =>
                       updateEnquiryStatus(enquiry._id, event.target.value as Enquiry['status'])
                     }
-                    className="border border-[#C9A84C]/15 bg-[#0a0a0a] px-3 py-2 text-sm"
+                    className="border border-[#D4AF37]/15 bg-[#0a0a0a] px-3 py-2 text-sm"
                   >
                     <option value="new">New</option>
                     <option value="contacted">Contacted</option>
@@ -490,7 +490,7 @@ export default function AdminPanel() {
                   key={order._id}
                   className="border bg-[#141210] p-5"
                   style={{
-                    borderColor: isPending ? 'rgba(251,146,60,0.5)' : 'rgba(201,168,76,0.15)',
+                    borderColor: isPending ? 'rgba(251,146,60,0.5)' : 'rgba(212,175,55,0.15)',
                     boxShadow: isPending ? '0 0 0 1px rgba(251,146,60,0.2)' : 'none',
                   }}
                 >
@@ -535,7 +535,7 @@ export default function AdminPanel() {
                     </div>
 
                     <div className="flex flex-col items-end gap-3 flex-shrink-0">
-                      <p className="text-[#C9A84C] font-semibold">{currency.format(order.amount)}</p>
+                      <p className="text-[#D4AF37] font-semibold">{currency.format(order.amount)}</p>
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order._id, e.target.value as OrderStatus)}
@@ -557,8 +557,8 @@ export default function AdminPanel() {
               )
             })}
             {orders.length === 0 && (
-              <div className="border border-[#C9A84C]/15 bg-[#141210] p-8 text-center text-[#F5F0E8]/50">
-                <ShoppingBag className="mx-auto mb-3 text-[#C9A84C]" />
+              <div className="border border-[#D4AF37]/15 bg-[#141210] p-8 text-center text-[#F5F0E8]/50">
+                <ShoppingBag className="mx-auto mb-3 text-[#D4AF37]" />
                 No orders yet.
               </div>
             )}

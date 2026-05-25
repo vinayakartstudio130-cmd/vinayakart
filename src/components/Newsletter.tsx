@@ -93,7 +93,7 @@ export default function Newsletter() {
         {/* Left panel â€” dark */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
-          style={{ background: '#162540' }}
+          style={{ background: '#2D0A0A' }}
         >
           <div className="section-label mb-6">Speak with a Curator</div>
           <h2
@@ -101,7 +101,7 @@ export default function Newsletter() {
             style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4vw, 3rem)' }}
           >
             Commission Your{' '}
-            <span className="font-semibold" style={{ color: '#1CB8D2' }}>Piece</span>
+            <span className="font-semibold" style={{ color: '#D4AF37' }}>Piece</span>
           </h2>
           <p className="font-sans leading-relaxed mb-8 max-w-sm" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.55)' }}>
             Whether you seek a bespoke commission, a specific sculpture, or simply expert guidance
@@ -111,7 +111,7 @@ export default function Newsletter() {
           <div className="space-y-3 mb-8">
             {['Bespoke Commissions', 'Purchase Enquiries', 'Collection Guidance', 'Valuations'].map((item) => (
               <div key={item} className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#1CB8D2' }} />
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#D4AF37' }} />
                 <span className="font-sans text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>{item}</span>
               </div>
             ))}
@@ -135,7 +135,7 @@ export default function Newsletter() {
         {/* Right panel â€” cyan */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
-          style={{ background: '#1CB8D2' }}
+          style={{ background: '#D4AF37' }}
         >
           {submitted ? (
             <motion.div
@@ -153,7 +153,7 @@ export default function Newsletter() {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <h3 className="font-display font-semibold text-white text-2xl mb-6" style={{ fontFamily: 'Montserrat Alternates, sans-serif' }}>
+              <h3 className="font-display font-semibold text-2xl mb-6" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#1C1200' }}>
                 Send an Enquiry
               </h3>
 
@@ -176,12 +176,12 @@ export default function Newsletter() {
                     placeholder="Your Name *"
                     className="w-full px-4 py-3 font-sans text-sm outline-none rounded-lg transition-all"
                     style={{
-                      background: 'rgba(255,255,255,0.2)',
-                      border: errors.name ? '2px solid #fff' : '2px solid rgba(255,255,255,0.3)',
-                      color: '#FFFFFF',
+                      background: 'rgba(255,255,255,0.35)',
+                      border: errors.name ? '2px solid #1C1200' : '2px solid rgba(28,8,0,0.25)',
+                      color: '#1C1200',
                     }}
                   />
-                  {errors.name && <p className="mt-1 font-sans text-[11px] text-white/80">{errors.name}</p>}
+                  {errors.name && <p className="mt-1 font-sans text-[11px]" style={{ color: '#1C1200' }}>{errors.name}</p>}
                 </div>
                 <div>
                   <input
@@ -199,7 +199,7 @@ export default function Newsletter() {
                       color: '#FFFFFF',
                     }}
                   />
-                  {errors.email && <p className="mt-1 font-sans text-[11px] text-white/80">{errors.email}</p>}
+                  {errors.email && <p className="mt-1 font-sans text-[11px]" style={{ color: '#1C1200' }}>{errors.email}</p>}
                 </div>
               </div>
 
@@ -212,7 +212,7 @@ export default function Newsletter() {
                   disabled={isSubmitting}
                   placeholder="Phone / WhatsApp"
                   className="w-full px-4 py-3 font-sans text-sm outline-none rounded-lg"
-                  style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.3)', color: '#FFFFFF' }}
+                  style={{ background: 'rgba(255,255,255,0.35)', border: '2px solid rgba(28,8,0,0.25)', color: '#1C1200' }}
                 />
                 <select
                   name="enquiry"
@@ -220,7 +220,7 @@ export default function Newsletter() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   className="w-full px-4 py-3 font-sans text-sm outline-none appearance-none cursor-pointer rounded-lg"
-                  style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.3)', color: form.enquiry ? '#FFFFFF' : 'rgba(255,255,255,0.7)' }}
+                  style={{ background: 'rgba(255,255,255,0.35)', border: '2px solid rgba(28,8,0,0.25)', color: form.enquiry ? '#1C1200' : 'rgba(28,8,0,0.5)' }}
                 >
                   <option value="" disabled style={{ color: '#162540' }}>Enquiry Type</option>
                   {enquiryTypes.map((t) => (
@@ -246,7 +246,7 @@ export default function Newsletter() {
                     color: '#FFFFFF',
                   }}
                 />
-                {errors.message && <p className="mt-1 font-sans text-[11px] text-white/80">{errors.message}</p>}
+                {errors.message && <p className="mt-1 font-sans text-[11px]" style={{ color: '#1C1200' }}>{errors.message}</p>}
               </div>
 
               <button

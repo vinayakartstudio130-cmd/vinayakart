@@ -21,7 +21,7 @@ export default function Gallery() {
     <section
       id="collections"
       className="py-20 md:py-28"
-      style={{ background: '#1a0800' }}
+      style={{ background: '#FAF7F2' }}
       aria-label="Sculpture Gallery"
     >
       <div className="section-container" ref={ref}>
@@ -35,18 +35,18 @@ export default function Gallery() {
           <div className="flex justify-center mb-4">
             <span
               className="font-sans text-[10px] font-semibold tracking-[0.3em] uppercase px-4 py-1.5 rounded-full"
-              style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C' }}
+              style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37' }}
             >
               Handcrafted Masterpieces
             </span>
           </div>
           <h2
-            className="font-display font-light text-white leading-tight"
-            style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)' }}
+            className="font-display font-light leading-tight"
+            style={{ color: '#1C1200', fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)' }}
           >
-            Our <span className="font-semibold" style={{ color: '#C9A84C' }}>Gallery</span>
+            Our <span className="font-semibold" style={{ color: '#D4AF37' }}>Gallery</span>
           </h2>
-          <p className="mt-4 font-sans text-white/50 max-w-lg mx-auto text-sm leading-relaxed">
+          <p className="mt-4 font-sans max-w-lg mx-auto text-sm leading-relaxed" style={{ color: '#7A6040' }}>
             Every piece tells a story — sculpted by masters, steeped in Maharashtra's living heritage.
           </p>
         </motion.div>
@@ -87,7 +87,7 @@ export default function Gallery() {
               {/* Gold border on hover */}
               <div
                 className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ border: '1px solid rgba(201,168,76,0.4)' }}
+                style={{ border: '1px solid rgba(212,175,55,0.4)' }}
               />
             </motion.div>
           ))}

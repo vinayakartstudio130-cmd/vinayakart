@@ -20,7 +20,7 @@ const testimonials: Testimonial[] = [
     name: 'Priya Raghunathan',
     role: 'Private Collector',
     location: 'Mumbai',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80',
+    avatar: '/images/gallery/swami samarth.jpeg',
     rating: 5,
     piece: 'Black Basalt Ganesha',
   },
@@ -58,7 +58,7 @@ export default function Testimonials() {
     <section
       id="testimonials"
       className="py-20 md:py-28 overflow-hidden"
-      style={{ background: '#162540' }}
+      style={{ background: '#2D0A0A' }}
       aria-label="Client Testimonials"
     >
       <div className="section-container" ref={ref}>
@@ -76,7 +76,7 @@ export default function Testimonials() {
             className="font-display font-light text-white leading-[1.1]"
             style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
           >
-            Words of the <span className="font-semibold" style={{ color: '#1CB8D2' }}>Discerning</span>
+            Words of the <span className="font-semibold" style={{ color: '#D4AF37' }}>Discerning</span>
           </h2>
         </motion.div>
 
@@ -100,8 +100,8 @@ export default function Testimonials() {
                 style={{
                   width: i === active ? '96px' : '72px',
                   height: i === active ? '96px' : '72px',
-                  border: i === active ? '3px solid #1CB8D2' : '2px solid rgba(28,184,210,0.3)',
-                  boxShadow: i === active ? '0 0 0 4px rgba(28,184,210,0.2)' : 'none',
+                  border: i === active ? '3px solid #D4AF37' : '2px solid rgba(212,175,55,0.3)',
+                  boxShadow: i === active ? '0 0 0 4px rgba(212,175,55,0.2)' : 'none',
                 }}
               >
                 <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
@@ -110,7 +110,7 @@ export default function Testimonials() {
                 <p className="font-sans text-[12px] font-semibold tracking-wide" style={{ color: i === active ? '#FFFFFF' : 'rgba(255,255,255,0.45)' }}>
                   {t.name}
                 </p>
-                <p className="font-sans text-[10px] tracking-[0.1em] uppercase" style={{ color: i === active ? '#1CB8D2' : 'rgba(28,184,210,0.4)' }}>
+                <p className="font-sans text-[10px] tracking-[0.1em] uppercase" style={{ color: i === active ? '#D4AF37' : 'rgba(212,175,55,0.4)' }}>
                   {t.role}
                 </p>
               </div>
@@ -128,15 +128,15 @@ export default function Testimonials() {
           <div
             className="p-8 md:p-10 rounded-xl text-center"
             style={{
-              background: '#1D3050',
-              border: '2px solid rgba(28,184,210,0.25)',
-              borderTop: '4px solid #1CB8D2',
+              background: '#3D1010',
+              border: '2px solid rgba(212,175,55,0.2)',
+              borderTop: '4px solid #D4AF37',
             }}
           >
             {/* Stars */}
             <div className="flex items-center justify-center gap-1 mb-5">
               {Array.from({ length: testimonials[active].rating }).map((_, i) => (
-                <Star key={i} size={14} style={{ color: '#1CB8D2', fill: '#1CB8D2' }} />
+                <Star key={i} size={14} style={{ color: '#D4AF37', fill: '#D4AF37' }} />
               ))}
             </div>
 
@@ -154,7 +154,7 @@ export default function Testimonials() {
               <span className="text-white/20">Â·</span>
               <span
                 className="font-sans text-[11px] tracking-[0.1em] uppercase px-2 py-0.5 rounded-full"
-                style={{ background: 'rgba(28,184,210,0.15)', color: '#1CB8D2' }}
+                style={{ background: 'rgba(212,175,55,0.15)', color: '#D4AF37' }}
               >
                 {testimonials[active].piece}
               </span>
@@ -165,7 +165,7 @@ export default function Testimonials() {
           <div className="flex items-center justify-center gap-4 mt-6">
             <button
               onClick={prev}
-              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#1CB8D2] transition-colors rounded-full border border-white/10 hover:border-[#1CB8D2]/50"
+              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#D4AF37] transition-colors rounded-full border border-white/10 hover:border-[#D4AF37]/50"
               aria-label="Previous"
             >
               <ChevronLeft size={15} />
@@ -179,7 +179,7 @@ export default function Testimonials() {
                   style={{
                     width: i === active ? '20px' : '6px',
                     height: '6px',
-                    background: i === active ? '#1CB8D2' : 'rgba(28,184,210,0.25)',
+                    background: i === active ? '#D4AF37' : 'rgba(212,175,55,0.25)',
                   }}
                   aria-label={`Go to ${i + 1}`}
                 />
@@ -187,7 +187,7 @@ export default function Testimonials() {
             </div>
             <button
               onClick={next}
-              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#1CB8D2] transition-colors rounded-full border border-white/10 hover:border-[#1CB8D2]/50"
+              className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-[#D4AF37] transition-colors rounded-full border border-white/10 hover:border-[#D4AF37]/50"
               aria-label="Next"
             >
               <ChevronRight size={15} />

@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Collections from './components/Collections'
+import Gallery from './components/Gallery'
 import ProductShowcase from './components/ProductShowcase'
 import WhyChooseUs from './components/WhyChooseUs'
 import Testimonials from './components/Testimonials'
@@ -18,7 +18,7 @@ function HomePage() {
       <Navbar />
       <main>
         <Hero />
-        <Collections />
+        <Gallery />
         <ProductShowcase />
         <WhyChooseUs />
         <Testimonials />

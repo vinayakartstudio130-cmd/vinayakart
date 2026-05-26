@@ -148,6 +148,11 @@ export default function AdminPanel() {
   }
 
   useEffect(() => {
+    // Wake up the Render server in the background while the user types credentials
+    apiRequest('/api/health', { timeoutMs: 60000 }).catch(() => {})
+  }, [])
+
+  useEffect(() => {
     if (!isLoggedIn) return
 
     loadAdminData().catch((loadError) => {

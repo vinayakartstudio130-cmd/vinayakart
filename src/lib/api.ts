@@ -25,7 +25,7 @@ export const apiUrl = (path: string) => {
 
 export async function apiRequest<T>(
   path: string,
-  { timeoutMs = 10000, headers, ...options }: ApiRequestOptions = {},
+  { timeoutMs = 60000, headers, ...options }: ApiRequestOptions = {},
 ): Promise<T> {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
@@ -56,7 +56,7 @@ export async function apiRequest<T>(
     return data as T;
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new ApiError('The request timed out. Please try again.', 408);
+      throw new ApiError('Server is waking up after inactivity — please wait a moment and try again.', 408);
     }
 
     if (error instanceof ApiError) {

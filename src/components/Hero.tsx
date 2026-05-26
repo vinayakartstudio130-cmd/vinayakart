@@ -106,26 +106,30 @@ export default function Hero() {
       >
         <div
           className="grid grid-cols-2 md:grid-cols-4"
-          style={{ background: '#6B0000' }}
+          style={{
+            backgroundImage: 'url(/images/gold-texture.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
           {stats.map((stat, i) => (
             <div
               key={stat.label}
               className={`flex flex-col items-center justify-center py-5 px-4 ${
-                i < stats.length - 1 ? 'border-r border-white/10' : ''
-              } ${i >= 2 ? 'border-t border-white/10 md:border-t-0' : ''}`}
+                i < stats.length - 1 ? 'border-r border-[#6B0000]/30' : ''
+              } ${i >= 2 ? 'border-t border-[#6B0000]/30 md:border-t-0' : ''}`}
             >
               <span
                 className="font-display font-bold mb-1"
                 style={{
-                  color: '#D4AF37',
+                  color: '#6B0000',
                   fontFamily: 'Montserrat Alternates, sans-serif',
                   fontSize: 'clamp(1.4rem, 3vw, 2rem)',
                 }}
               >
                 {stat.number}
               </span>
-              <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-white/40">
+              <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-[#6B0000]/70">
                 {stat.label}
               </span>
             </div>

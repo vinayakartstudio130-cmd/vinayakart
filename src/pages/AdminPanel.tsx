@@ -274,8 +274,16 @@ export default function AdminPanel() {
 
   const archiveProduct = async (productId: string) => {
     setError('')
-    await adminRequest(`/api/admin/products/${productId}`, { method: 'DELETE' })
-    await loadAdminData()
+    setIsBusy(true)
+    try {
+      await adminRequest(`/api/admin/products/${productId}`, { method: 'DELETE' })
+      setMessage('Product archived.')
+      await loadAdminData()
+    } catch (archiveError) {
+      setError(archiveError instanceof Error ? archiveError.message : 'Unable to archive product.')
+    } finally {
+      setIsBusy(false)
+    }
   }
 
   const updateEnquiryStatus = async (id: string, status: Enquiry['status']) => {

@@ -260,7 +260,7 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
 export default function ProductShowcase() {
   const { user } = useAuth()
   const [activeFilter, setActiveFilter] = useState('All')
-  const products = fallbackProducts
+  const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [step, setStep] = useState<CheckoutStep>('details')
   const [buyer, setBuyer] = useState({ name: '', email: '', phone: '' })
@@ -284,7 +284,12 @@ export default function ProductShowcase() {
   )
 
   useEffect(() => {
-    setIsLoading(false)
+    apiRequest<{ products: Product[] }>('/api/products')
+      .then(({ products: live }) => {
+        if (live.length > 0) setProducts(live)
+      })
+      .catch(() => {/* keep fallback */})
+      .finally(() => setIsLoading(false))
   }, [])
 
   const openCheckout = (product: Product) => {

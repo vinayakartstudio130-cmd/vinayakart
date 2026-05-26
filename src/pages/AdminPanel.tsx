@@ -1,4 +1,4 @@
-﻿import { FormEvent, useEffect, useMemo, useState } from 'react'
+﻿import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   CheckCircle,
@@ -118,6 +118,8 @@ export default function AdminPanel() {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [isBusy, setIsBusy] = useState(false)
+  const [imagePreview, setImagePreview] = useState('')
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   const isLoggedIn = Boolean(token)
 
@@ -179,9 +181,38 @@ export default function AdminPanel() {
     setToken('')
   }
 
+  const compressImage = (file: File): Promise<string> =>
+    new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const img = new Image()
+        img.onload = () => {
+          const MAX = 800
+          const scale = Math.min(1, MAX / Math.max(img.width, img.height))
+          const canvas = document.createElement('canvas')
+          canvas.width = Math.round(img.width * scale)
+          canvas.height = Math.round(img.height * scale)
+          canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height)
+          resolve(canvas.toDataURL('image/jpeg', 0.82))
+        }
+        img.src = e.target!.result as string
+      }
+      reader.readAsDataURL(file)
+    })
+
+  const handleImageSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+    const base64 = await compressImage(file)
+    setProductForm((prev) => ({ ...prev, image: base64 }))
+    setImagePreview(base64)
+  }
+
   const resetProductForm = () => {
     setProductForm(emptyProduct)
     setEditingId('')
+    setImagePreview('')
+    if (imageInputRef.current) imageInputRef.current.value = ''
   }
 
   const handleProductSubmit = async (event: FormEvent) => {
@@ -231,6 +262,8 @@ export default function AdminPanel() {
       badgeColor: product.badgeColor,
       stock: String(product.stock),
     })
+    setImagePreview('')
+    if (imageInputRef.current) imageInputRef.current.value = ''
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -377,7 +410,6 @@ export default function AdminPanel() {
                   ['category', 'Category'],
                   ['price', 'Price'],
                   ['dimensions', 'Dimensions'],
-                  ['image', 'Image URL'],
                   ['badge', 'Badge'],
                   ['stock', 'Stock'],
                 ].map(([key, label]) => (
@@ -393,9 +425,29 @@ export default function AdminPanel() {
                     placeholder={label}
                     type={key === 'price' || key === 'stock' ? 'number' : 'text'}
                     className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                    required={['name', 'material', 'category', 'price', 'image'].includes(key)}
+                    required={['name', 'material', 'category', 'price'].includes(key)}
                   />
                 ))}
+                <div className="space-y-2">
+                  <label className="block cursor-pointer border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/40 hover:border-[#D4AF37]/40">
+                    <input
+                      ref={imageInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                      required={!productForm.image}
+                    />
+                    {productForm.image ? 'Change image' : 'Upload image *'}
+                  </label>
+                  {(imagePreview || productForm.image) && (
+                    <img
+                      src={imagePreview || productForm.image}
+                      alt="preview"
+                      className="h-32 w-full object-cover"
+                    />
+                  )}
+                </div>
                 <select
                   value={productForm.badgeColor}
                   onChange={(event) =>

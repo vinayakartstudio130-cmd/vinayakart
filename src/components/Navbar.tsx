@@ -43,11 +43,9 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          backgroundImage: 'url(/images/gold-texture.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          borderBottom: '1px solid rgba(255,255,255,0.2)',
-          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.25)' : '0 2px 12px rgba(0,0,0,0.15)',
+          background: '#6B0000',
+          borderBottom: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.35)' : '0 2px 12px rgba(0,0,0,0.2)',
         }}
       >
         {/* Top accent line */}
@@ -60,7 +58,7 @@ export default function Navbar() {
             <a href="/" className="flex items-center group flex-shrink-0">
               <div
                 className="px-3 py-1.5 rounded-md transition-opacity duration-300 group-hover:opacity-90"
-                style={{ background: '#6B0000' }}
+                style={{ background: '#D4AF37' }}
               >
                 <img
                   src="/images/logo-light.png"

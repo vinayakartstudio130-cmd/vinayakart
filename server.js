@@ -147,11 +147,23 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+const collectionSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    description: { type: String, default: '' },
+    image: { type: String, default: '' },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
 const Product = mongoose.model('Product', productSchema);
 const Enquiry = mongoose.model('Enquiry', enquirySchema);
 const AdminUser = mongoose.model('AdminUser', adminUserSchema);
 const User = mongoose.model('User', userSchema);
 const Order = mongoose.model('Order', orderSchema);
+const Collection = mongoose.model('Collection', collectionSchema);
 
 const seedProducts = [
   {
@@ -757,6 +769,66 @@ app.delete(
 );
 
 app.get(
+  '/api/admin/collections',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const collections = await Collection.find().sort({ createdAt: -1 });
+    res.json({ collections });
+  }),
+);
+
+app.post(
+  '/api/admin/collections',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    requireFields(req.body, ['name']);
+    const collection = await Collection.create({
+      ...req.body,
+      slug: req.body.slug ? slugify(req.body.slug) : slugify(req.body.name),
+    });
+    res.status(201).json({ collection });
+  }),
+);
+
+app.put(
+  '/api/admin/collections/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const update = {
+      ...req.body,
+      slug: req.body.slug ? slugify(req.body.slug) : undefined,
+    };
+    Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);
+    const collection = await Collection.findByIdAndUpdate(req.params.id, update, {
+      new: true,
+      runValidators: true,
+    });
+    if (!collection) {
+      res.status(404).json({ error: 'Collection not found.' });
+      return;
+    }
+    res.json({ collection });
+  }),
+);
+
+app.delete(
+  '/api/admin/collections/:id',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const collection = await Collection.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true },
+    );
+    if (!collection) {
+      res.status(404).json({ error: 'Collection not found.' });
+      return;
+    }
+    res.json({ collection });
+  }),
+);
+
+app.get(
   '/api/admin/enquiries',
   requireAdmin,
   asyncHandler(async (req, res) => {
@@ -823,6 +895,14 @@ app.put(
     }
 
     res.json({ order });
+  }),
+);
+
+app.get(
+  '/api/collections',
+  asyncHandler(async (req, res) => {
+    const collections = await Collection.find({ isActive: true }).sort({ createdAt: -1 });
+    res.json({ collections });
   }),
 );
 

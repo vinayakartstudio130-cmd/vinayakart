@@ -3,6 +3,7 @@ import {
   AlertCircle,
   CheckCircle,
   Inbox,
+  Layers,
   LogOut,
   Package,
   ReceiptText,
@@ -31,6 +32,15 @@ interface Product {
   badge?: string
   badgeColor: 'gold' | 'stone' | 'red'
   stock: number
+  isActive: boolean
+}
+
+interface Collection {
+  _id: string
+  name: string
+  slug: string
+  description: string
+  image: string
   isActive: boolean
 }
 
@@ -85,6 +95,12 @@ interface Order {
   createdAt: string
 }
 
+const emptyCollection = {
+  name: '',
+  description: '',
+  image: '',
+}
+
 const emptyProduct = {
   name: '',
   material: '',
@@ -108,13 +124,18 @@ export default function AdminPanel() {
   const [token, setToken] = useState(getAdminToken() || '')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [activeTab, setActiveTab] = useState<'products' | 'enquiries' | 'orders'>('products')
+  const [activeTab, setActiveTab] = useState<'products' | 'collections' | 'enquiries' | 'orders'>('products')
   const [summary, setSummary] = useState<AdminSummary | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [enquiries, setEnquiries] = useState<Enquiry[]>([])
   const [orders, setOrders] = useState<Order[]>([])
+  const [collections, setCollections] = useState<Collection[]>([])
   const [productForm, setProductForm] = useState(emptyProduct)
   const [editingId, setEditingId] = useState('')
+  const [collectionForm, setCollectionForm] = useState(emptyCollection)
+  const [editingCollectionId, setEditingCollectionId] = useState('')
+  const [addItemTarget, setAddItemTarget] = useState('')
+  const [addItemProductId, setAddItemProductId] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [isBusy, setIsBusy] = useState(false)
@@ -134,17 +155,19 @@ export default function AdminPanel() {
   )
 
   const loadAdminData = async () => {
-    const [summaryData, productData, enquiryData, orderData] = await Promise.all([
+    const [summaryData, productData, enquiryData, orderData, collectionData] = await Promise.all([
       adminRequest<AdminSummary>('/api/admin/summary'),
       adminRequest<{ products: Product[] }>('/api/admin/products'),
       adminRequest<{ enquiries: Enquiry[] }>('/api/admin/enquiries'),
       adminRequest<{ orders: Order[] }>('/api/admin/orders'),
+      adminRequest<{ collections: Collection[] }>('/api/admin/collections'),
     ])
 
     setSummary(summaryData)
     setProducts(productData.products)
     setEnquiries(enquiryData.enquiries)
     setOrders(orderData.orders)
+    setCollections(collectionData.collections)
   }
 
   useEffect(() => {
@@ -286,6 +309,82 @@ export default function AdminPanel() {
     }
   }
 
+  const handleCollectionSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    setError('')
+    setMessage('')
+    setIsBusy(true)
+    try {
+      if (editingCollectionId) {
+        await adminRequest(`/api/admin/collections/${editingCollectionId}`, {
+          method: 'PUT',
+          body: JSON.stringify(collectionForm),
+        })
+      } else {
+        await adminRequest('/api/admin/collections', {
+          method: 'POST',
+          body: JSON.stringify(collectionForm),
+        })
+      }
+      setMessage(editingCollectionId ? 'Collection updated.' : 'Collection created.')
+      resetCollectionForm()
+      await loadAdminData()
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Unable to save collection.')
+    } finally {
+      setIsBusy(false)
+    }
+  }
+
+  const resetCollectionForm = () => {
+    setCollectionForm(emptyCollection)
+    setEditingCollectionId('')
+  }
+
+  const editCollection = (collection: Collection) => {
+    setEditingCollectionId(collection._id)
+    setCollectionForm({
+      name: collection.name,
+      description: collection.description,
+      image: collection.image,
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const archiveCollection = async (id: string) => {
+    setError('')
+    setIsBusy(true)
+    try {
+      await adminRequest(`/api/admin/collections/${id}`, { method: 'DELETE' })
+      setMessage('Collection archived.')
+      await loadAdminData()
+    } catch (archiveError) {
+      setError(archiveError instanceof Error ? archiveError.message : 'Unable to archive collection.')
+    } finally {
+      setIsBusy(false)
+    }
+  }
+
+  const assignProductToCollection = async (productId: string, categorySlug: string) => {
+    if (!productId) return
+    setError('')
+    setIsBusy(true)
+    try {
+      await adminRequest(`/api/admin/products/${productId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ category: categorySlug }),
+      })
+      setMessage('Product added to collection.')
+      setAddItemTarget('')
+      setAddItemProductId('')
+      await loadAdminData()
+    } catch (assignError) {
+      setError(assignError instanceof Error ? assignError.message : 'Unable to assign product.')
+    } finally {
+      setIsBusy(false)
+    }
+  }
+
   const updateEnquiryStatus = async (id: string, status: Enquiry['status']) => {
     await adminRequest(`/api/admin/enquiries/${id}`, {
       method: 'PUT',
@@ -379,6 +478,7 @@ export default function AdminPanel() {
         <div className="mb-6 flex flex-wrap gap-2">
           {[
             ['products', 'Products'],
+            ['collections', 'Collections'],
             ['enquiries', 'Enquiries'],
             ['orders', 'Orders'],
           ].map(([tab, label]) => (
@@ -407,6 +507,143 @@ export default function AdminPanel() {
           </div>
         )}
 
+        {activeTab === 'collections' && (
+          <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+            <form
+              onSubmit={handleCollectionSubmit}
+              className="h-fit border border-[#D4AF37]/15 bg-[#141210] p-5"
+            >
+              <div className="mb-5 flex items-center gap-3">
+                <Layers size={18} className="text-[#D4AF37]" />
+                <h2 className="font-display text-2xl">
+                  {editingCollectionId ? 'Edit Collection' : 'New Collection'}
+                </h2>
+              </div>
+              <div className="space-y-3">
+                <input
+                  value={collectionForm.name}
+                  onChange={(e) => setCollectionForm((prev) => ({ ...prev, name: e.target.value }))}
+                  placeholder="Collection name *"
+                  className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                  required
+                />
+                <input
+                  value={collectionForm.description}
+                  onChange={(e) => setCollectionForm((prev) => ({ ...prev, description: e.target.value }))}
+                  placeholder="Description"
+                  className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                />
+                <input
+                  value={collectionForm.image}
+                  onChange={(e) => setCollectionForm((prev) => ({ ...prev, image: e.target.value }))}
+                  placeholder="Cover image URL (optional)"
+                  className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                />
+              </div>
+              <div className="mt-5 flex gap-3">
+                <button className="btn-gold" disabled={isBusy}>
+                  <Save size={14} />
+                  {editingCollectionId ? 'Update' : 'Create'}
+                </button>
+                {editingCollectionId && (
+                  <button type="button" onClick={resetCollectionForm} className="btn-ghost-gold">
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
+
+            <div className="grid gap-4 content-start">
+              {collections.map((collection) => {
+                const collectionProducts = products.filter((p) => p.category === collection.slug)
+                const isAddingItem = addItemTarget === collection._id
+                return (
+                  <article key={collection._id} className="border border-[#D4AF37]/15 bg-[#141210] p-5">
+                    <div className="mb-3 flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="font-display text-2xl">{collection.name}</h3>
+                        <p className="text-xs text-[#F5F0E8]/40 mt-0.5">
+                          slug: {collection.slug} &middot; {collectionProducts.length} item{collectionProducts.length !== 1 ? 's' : ''}
+                        </p>
+                        {collection.description && (
+                          <p className="text-sm text-[#F5F0E8]/60 mt-1">{collection.description}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <button onClick={() => editCollection(collection)} className="btn-ghost-gold">Edit</button>
+                        <button onClick={() => archiveCollection(collection._id)} className="btn-ghost-gold">Archive</button>
+                      </div>
+                    </div>
+
+                    {collectionProducts.length > 0 && (
+                      <div className="mb-3 space-y-2">
+                        {collectionProducts.map((p) => (
+                          <div key={p._id} className="flex items-center justify-between gap-3 border border-[#D4AF37]/10 bg-[#0a0a0a] px-3 py-2">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <img src={p.image} alt="" className="h-10 w-10 flex-shrink-0 object-cover" />
+                              <div className="min-w-0">
+                                <p className="text-sm truncate">{p.name}</p>
+                                <p className="text-xs text-[#F5F0E8]/40">{p.material}</p>
+                              </div>
+                            </div>
+                            <p className="text-xs text-[#D4AF37] flex-shrink-0">{currency.format(p.price)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {isAddingItem ? (
+                      <div className="flex gap-2">
+                        <select
+                          value={addItemProductId}
+                          onChange={(e) => setAddItemProductId(e.target.value)}
+                          className="flex-1 border border-[#D4AF37]/15 bg-[#0a0a0a] px-3 py-2 text-sm outline-none"
+                        >
+                          <option value="">Select a product…</option>
+                          {products
+                            .filter((p) => p.category !== collection.slug)
+                            .map((p) => (
+                              <option key={p._id} value={p._id}>
+                                {p.name}{p.category ? ` (${p.category})` : ''}
+                              </option>
+                            ))}
+                        </select>
+                        <button
+                          onClick={() => assignProductToCollection(addItemProductId, collection.slug)}
+                          disabled={!addItemProductId || isBusy}
+                          className="btn-gold"
+                        >
+                          Add
+                        </button>
+                        <button
+                          onClick={() => { setAddItemTarget(''); setAddItemProductId('') }}
+                          className="btn-ghost-gold"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => { setAddItemTarget(collection._id); setAddItemProductId('') }}
+                        className="btn-ghost-gold text-xs"
+                      >
+                        + Add Item
+                      </button>
+                    )}
+                  </article>
+                )
+              })}
+
+              {collections.length === 0 && (
+                <div className="border border-[#D4AF37]/15 bg-[#141210] p-8 text-center text-[#F5F0E8]/50">
+                  <Layers className="mx-auto mb-3 text-[#D4AF37]" />
+                  No collections yet. Create one using the form.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {activeTab === 'products' && (
           <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
             <form
@@ -420,7 +657,6 @@ export default function AdminPanel() {
                 {[
                   ['name', 'Product name'],
                   ['material', 'Material'],
-                  ['category', 'Category'],
                   ['price', 'Price'],
                   ['dimensions', 'Dimensions'],
                   ['badge', 'Badge'],
@@ -438,9 +674,30 @@ export default function AdminPanel() {
                     placeholder={label}
                     type={key === 'price' || key === 'stock' ? 'number' : 'text'}
                     className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                    required={['name', 'material', 'category', 'price'].includes(key)}
+                    required={['name', 'material', 'price'].includes(key)}
                   />
                 ))}
+                {collections.length > 0 ? (
+                  <select
+                    value={productForm.category}
+                    onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
+                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                    required
+                  >
+                    <option value="">Select collection *</option>
+                    {collections.map((c) => (
+                      <option key={c._id} value={c.slug}>{c.name}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    value={productForm.category}
+                    onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
+                    placeholder="Category"
+                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                    required
+                  />
+                )}
                 <div className="space-y-2">
                   <label className="block cursor-pointer border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/40 hover:border-[#D4AF37]/40">
                     <input

@@ -29,6 +29,9 @@ interface Product {
   price: number
   dimensions: string
   image: string
+  imageFront: string
+  imageBack: string
+  imageSide: string
   badge?: string
   badgeColor: 'gold' | 'stone' | 'red'
   stock: number
@@ -108,6 +111,9 @@ const emptyProduct = {
   price: '',
   dimensions: '',
   image: '',
+  imageFront: '',
+  imageBack: '',
+  imageSide: '',
   badge: '',
   badgeColor: 'gold',
   stock: '1',
@@ -139,8 +145,11 @@ export default function AdminPanel() {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [isBusy, setIsBusy] = useState(false)
-  const [imagePreview, setImagePreview] = useState('')
+  const [imagePreviews, setImagePreviews] = useState({ main: '', front: '', back: '', side: '' })
   const imageInputRef = useRef<HTMLInputElement>(null)
+  const imageFrontRef = useRef<HTMLInputElement>(null)
+  const imageBackRef = useRef<HTMLInputElement>(null)
+  const imageSideRef = useRef<HTMLInputElement>(null)
 
   const isLoggedIn = Boolean(token)
 
@@ -228,19 +237,22 @@ export default function AdminPanel() {
       reader.readAsDataURL(file)
     })
 
-  const handleImageSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = async (event: ChangeEvent<HTMLInputElement>, field: 'image' | 'imageFront' | 'imageBack' | 'imageSide') => {
     const file = event.target.files?.[0]
     if (!file) return
     const base64 = await compressImage(file)
-    setProductForm((prev) => ({ ...prev, image: base64 }))
-    setImagePreview(base64)
+    setProductForm((prev) => ({ ...prev, [field]: base64 }))
+    const key = field === 'image' ? 'main' : field === 'imageFront' ? 'front' : field === 'imageBack' ? 'back' : 'side'
+    setImagePreviews((prev) => ({ ...prev, [key]: base64 }))
   }
 
   const resetProductForm = () => {
     setProductForm(emptyProduct)
     setEditingId('')
-    setImagePreview('')
-    if (imageInputRef.current) imageInputRef.current.value = ''
+    setImagePreviews({ main: '', front: '', back: '', side: '' })
+    for (const ref of [imageInputRef, imageFrontRef, imageBackRef, imageSideRef]) {
+      if (ref.current) ref.current.value = ''
+    }
   }
 
   const handleProductSubmit = async (event: FormEvent) => {
@@ -286,12 +298,17 @@ export default function AdminPanel() {
       price: String(product.price),
       dimensions: product.dimensions,
       image: product.image,
+      imageFront: product.imageFront || '',
+      imageBack: product.imageBack || '',
+      imageSide: product.imageSide || '',
       badge: product.badge || '',
       badgeColor: product.badgeColor,
       stock: String(product.stock),
     })
-    setImagePreview('')
-    if (imageInputRef.current) imageInputRef.current.value = ''
+    setImagePreviews({ main: '', front: '', back: '', side: '' })
+    for (const ref of [imageInputRef, imageFrontRef, imageBackRef, imageSideRef]) {
+      if (ref.current) ref.current.value = ''
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -698,25 +715,41 @@ export default function AdminPanel() {
                     required
                   />
                 )}
-                <div className="space-y-2">
-                  <label className="block cursor-pointer border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/40 hover:border-[#D4AF37]/40">
-                    <input
-                      ref={imageInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageSelect}
-                      className="hidden"
-                      required={!productForm.image}
-                    />
-                    {productForm.image ? 'Change image' : 'Upload image *'}
-                  </label>
-                  {(imagePreview || productForm.image) && (
-                    <img
-                      src={imagePreview || productForm.image}
-                      alt="preview"
-                      className="h-32 w-full object-cover"
-                    />
-                  )}
+                <div className="grid grid-cols-2 gap-2">
+                  {(
+                    [
+                      { field: 'image',       label: 'Main *', ref: imageInputRef,  previewKey: 'main'  },
+                      { field: 'imageFront',  label: 'Front',  ref: imageFrontRef,  previewKey: 'front' },
+                      { field: 'imageBack',   label: 'Back',   ref: imageBackRef,   previewKey: 'back'  },
+                      { field: 'imageSide',   label: 'Side',   ref: imageSideRef,   previewKey: 'side'  },
+                    ] as const
+                  ).map(({ field, label, ref, previewKey }) => {
+                    const stored = productForm[field]
+                    const preview = imagePreviews[previewKey]
+                    return (
+                      <div key={field} className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-[0.16em] text-[#F5F0E8]/40">{label}</p>
+                        <label className="block cursor-pointer border border-[#D4AF37]/15 bg-[#0a0a0a] px-3 py-2 text-center text-xs text-[#F5F0E8]/40 hover:border-[#D4AF37]/40">
+                          <input
+                            ref={ref}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageSelect(e, field)}
+                            className="hidden"
+                            required={field === 'image' && !stored}
+                          />
+                          {stored ? 'Change' : 'Upload'}
+                        </label>
+                        {(preview || stored) && (
+                          <img
+                            src={preview || stored}
+                            alt={label}
+                            className="aspect-square w-full object-cover"
+                          />
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
                 <select
                   value={productForm.badgeColor}

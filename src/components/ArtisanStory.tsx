@@ -1,149 +1,121 @@
-﻿import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { Award, Users, Gem } from 'lucide-react'
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 
-const ARTISAN_IMAGE = 'https://images.unsplash.com/photo-1509587584298-0f3620e1a35f?w=800&q=85&fit=crop'
-
-const highlights = [
+const steps = [
   {
-    icon: Award,
-    title: 'National Award Recipients',
-    desc: 'Several of our artisan families carry the Government of India National Award for traditional craft excellence.',
+    number: '01',
+    title: 'Consultation',
+    description:
+      'Each project begins with understanding the space, the context, and the intention behind the piece.',
   },
   {
-    icon: Users,
-    title: '60+ Artisan Families',
-    desc: 'A curated collective of master craftsmen from Nashik, Kolhapur, Pandharpur, and Pune.',
+    number: '02',
+    title: 'Material Direction',
+    description:
+      'Wood, resin, acrylic, textured finishes, metallic surfaces, and layered compositions are selected to enhance the visual and tactile quality of the work.',
   },
   {
-    icon: Gem,
-    title: 'Collector-Certified Pieces',
-    desc: 'Every sculpture comes with a provenance certificate, artisan biography, and authenticity documentation.',
+    number: '03',
+    title: 'Form Development',
+    description:
+      'Dimensions, structure, silhouette, and detailing are refined through precise drafting and spatial study before execution begins.',
+  },
+  {
+    number: '04',
+    title: 'Craft & Finish',
+    description:
+      'Every piece is shaped through a meticulous balance of technical precision and hand-finished artistry. Textures, lighting integration, depth, and surface refinement are completed with exceptional attention to detail.',
+  },
+  {
+    number: '05',
+    title: 'Final Presentation',
+    description:
+      'Each work is carefully prepared for installation, presentation, or spatial integration with secure handling and refined finishing standards.',
+  },
+  {
+    number: '06',
+    title: 'Delivery',
+    description: 'Packed with care. Delivered globally. Installed, if required.',
   },
 ]
 
-export default function ArtisanStory() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+}
 
-  const { scrollYProgress } = useScroll({ target: imageRef, offset: ['start end', 'end start'] })
-  const imageY = useTransform(scrollYProgress, [0, 1], ['5%', '-5%'])
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+export default function ArtisanStory() {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
     <section
-      id="artisan"
+      id="process"
       className="py-20 md:py-28 overflow-hidden"
       style={{ background: '#162540' }}
-      aria-label="Artisan Story"
+      aria-label="Studio Process"
     >
-      <div className="section-container" ref={sectionRef}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-          {/* Left â€” image */}
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, ease: [0.25,0.46,0.45,0.94] }}
+      <div className="section-container" ref={ref}>
+        <motion.div
+          className="text-center mb-14 md:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="section-label mb-4">The Making</div>
+          <h2
+            className="font-display font-light text-white leading-[1.1] mb-3"
+            style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
           >
-            <div
-              ref={imageRef}
-              className="relative overflow-hidden rounded-xl"
-              style={{ border: '2px solid rgba(28,184,210,0.25)' }}
-            >
-              <motion.img
-                src={ARTISAN_IMAGE}
-                alt="Master artisan at work in Maharashtra"
-                className="w-full aspect-[4/5] object-cover"
-                style={{ y: imageY, filter: 'brightness(0.8) contrast(1.05)' }}
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#162540]/70 via-transparent to-transparent" />
-            </div>
+            The Studio{' '}
+            <span className="font-semibold" style={{ color: '#D4AF37' }}>Process</span>
+          </h2>
+          <p className="font-sans text-sm max-w-sm mx-auto" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            Six steps from your brief to the final piece.
+          </p>
+        </motion.div>
 
-            {/* Floating quote card */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          {steps.map((step) => (
             <motion.div
-              className="absolute -bottom-6 -right-4 md:-right-8 max-w-[270px] p-5 z-10 rounded-lg"
-              style={{
-                background: 'rgba(28,48,80,0.95)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(28,184,210,0.3)',
-                borderLeft: '4px solid #1CB8D2',
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.5 }}
+              key={step.number}
+              variants={cardVariants}
+              className="relative group rounded-xl p-6 md:p-7 overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.12)' }}
             >
-              <p className="font-display italic text-white/85 mb-3 leading-relaxed" style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1rem' }}>
-                "Every chisel mark is a prayer. We do not make idols â€” we reveal them."
-              </p>
-              <p className="font-sans text-[10px] tracking-[0.18em] uppercase" style={{ color: '#1CB8D2' }}>
-                â€” Ganesh Shilpkar, Nashik
+              <div
+                className="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                style={{ background: '#D4AF37' }}
+              />
+              <span
+                className="font-display font-bold mb-4 block"
+                style={{ color: '#D4AF37', fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '2rem', lineHeight: 1 }}
+              >
+                {step.number}
+              </span>
+              <h3
+                className="font-display font-semibold text-white mb-3"
+                style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.15rem' }}
+              >
+                {step.title}
+              </h3>
+              <p className="font-sans text-[0.8125rem] leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                {step.description}
               </p>
             </motion.div>
-          </motion.div>
-
-          {/* Right â€” text content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.25,0.46,0.45,0.94] }}
-          >
-            <div className="section-label mb-6">The Makers Behind the Art</div>
-
-            <h2
-              className="font-display font-light text-white leading-[1.1] mb-6"
-              style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2.0rem, 4vw, 3.2rem)' }}
-            >
-              Crafted by{' '}
-              <span className="font-semibold" style={{ color: '#1CB8D2' }}>Master Artisans</span>
-            </h2>
-
-            <p className="font-sans leading-relaxed mb-5" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.6)' }}>
-              For over two decades, VinayakArt has been the trusted bridge between Maharashtra's
-              most gifted hereditary sculptors and collectors who understand the profound value
-              of genuine traditional craft.
-            </p>
-
-            <p className="font-sans leading-relaxed mb-10" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.45)' }}>
-              From the Shilpkar families of Nashik to the brass-casting guilds of Kolhapur â€”
-              our artisans carry techniques passed down across 12 to 20 generations,
-              untouched by industrialisation.
-            </p>
-
-            <div className="divider-cyan mb-10" />
-
-            <div className="space-y-6">
-              {highlights.map((item, i) => (
-                <motion.div
-                  key={item.title}
-                  className="flex items-start gap-4"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.4 + i * 0.12 }}
-                >
-                  <div
-                    className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-lg"
-                    style={{ background: 'rgba(28,184,210,0.12)', border: '1px solid rgba(28,184,210,0.25)' }}
-                  >
-                    <item.icon size={16} style={{ color: '#1CB8D2' }} />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-white mb-1" style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: '1.1rem' }}>
-                      {item.title}
-                    </h4>
-                    <p className="font-sans text-[0.8125rem] leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                      {item.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   )
 }
-

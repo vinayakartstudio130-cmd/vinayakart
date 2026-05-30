@@ -1,18 +1,16 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUp, Instagram, Facebook, Youtube } from 'lucide-react'
+import { ArrowUp, Instagram, Linkedin } from 'lucide-react'
 
 const footerLinks = {
-  Collections: ['Sacred Idols', 'Stone Sculptures', 'Brass Works', 'Terracotta Art', 'Wood Carvings'],
-  Company: ['About VinayakArt', 'Our Artisans', 'Authenticity', 'Press & Media', 'Careers'],
-  Services: ['Custom Commission', 'Valuation', 'White-Glove Delivery', 'Collector Concierge', 'Trade-Up Programme'],
-  Support: ['Contact Us', 'FAQs', 'Shipping & Returns', 'Privacy Policy', 'Terms of Service'],
+  Collections: ['The Icon Series', 'The Form Series', 'The Heritage Series', 'The Atelier Series', 'The Micro Series'],
+  Studio: ['Process', 'Custom Orders', 'About the Studio', 'Contact'],
+  Legal: ['Shipping Policy', 'Terms of Service', 'Privacy Policy'],
 }
 
 const socials = [
   { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/vinayakartstudioo?igsh=ZWRmaTRna3htZmJ3' },
-  { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61570960241164&mibextid=ZbWKwL' },
-  { icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/channel/UCWZR3_9uBfcG8FOoV7VZQvQ' },
+  { icon: Linkedin, label: 'LinkedIn', href: '#' },
 ]
 
 export default function Footer() {
@@ -34,7 +32,6 @@ export default function Footer() {
         style={{ background: '#FAF7F2' }}
         aria-label="Site footer"
       >
-        {/* Main footer */}
         <div className="section-container py-14 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
 
@@ -48,9 +45,15 @@ export default function Footer() {
                 />
               </div>
 
-              <p className="font-sans text-[0.8125rem] leading-relaxed mb-6" style={{ color: 'rgba(28,8,0,0.5)' }}>
-                Collector-grade Maharashtrian sculptures, brass works, and devotional art â€”
-                sourced directly from master artisan families and delivered worldwide.
+              <p className="font-sans text-[0.9rem] font-semibold leading-relaxed mb-1" style={{ color: 'rgba(28,8,0,0.7)' }}>
+                The Soul of India.
+              </p>
+              <p className="font-sans text-[0.8125rem] leading-relaxed mb-2" style={{ color: 'rgba(28,8,0,0.5)' }}>
+                Vinayak Art Studio, Pune, Maharashtra, India
+              </p>
+              <p className="font-sans text-[0.8125rem] leading-relaxed mb-6" style={{ color: 'rgba(28,8,0,0.4)' }}>
+                Sculptural objects and architectural forms defined by precision,
+                materiality, and timeless craftsmanship. Delivering globally.
               </p>
 
               <div className="flex items-center gap-2 mb-6">
@@ -67,19 +70,24 @@ export default function Footer() {
                     <s.icon size={14} className="group-hover:scale-110 transition-transform" />
                   </a>
                 ))}
+                <a
+                  href="#"
+                  aria-label="Behance"
+                  className="w-9 h-9 flex items-center justify-center hover:text-[#D4AF37] transition-all duration-300 rounded-lg group font-bold text-xs"
+                  style={{ color: 'rgba(28,8,0,0.4)', background: 'rgba(28,8,0,0.04)', border: '1px solid rgba(28,8,0,0.1)' }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Be
+                </a>
               </div>
 
-              <div className="flex flex-col gap-2">
-                {['Govt. of India Registered', 'ASI Compliant', '25 Years Heritage'].map((badge) => (
-                  <span
-                    key={badge}
-                    className="font-sans text-[9px] tracking-[0.18em] uppercase px-2 py-1 self-start rounded"
-                    style={{ border: '1px solid rgba(212,175,55,0.3)', color: 'rgba(28,8,0,0.45)', background: 'rgba(212,175,55,0.06)' }}
-                  >
-                    {badge}
-                  </span>
-                ))}
-              </div>
+              <span
+                className="font-sans text-[9px] tracking-[0.18em] uppercase px-2 py-1 self-start rounded"
+                style={{ border: '1px solid rgba(212,175,55,0.3)', color: 'rgba(28,8,0,0.45)', background: 'rgba(212,175,55,0.06)' }}
+              >
+                10+ Years &middot; Global Delivery
+              </span>
             </div>
 
             <div className="hidden md:block md:col-span-1" />
@@ -104,14 +112,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="divider-cyan mx-8 md:mx-16 opacity-30" />
 
-        {/* Bottom bar */}
         <div className="section-container py-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="font-sans text-[11px] tracking-[0.08em]" style={{ color: 'rgba(28,8,0,0.35)' }}>
-              &copy; {new Date().getFullYear()} VinayakArt. All rights reserved. Maharashtra, India.
+              &copy; {new Date().getFullYear()} Vinayak Art Studio. All rights reserved. Pune, Maharashtra, India.
             </p>
             <div className="flex items-center gap-5">
               {['Privacy Policy', 'Terms of Service', 'Shipping Policy'].map((link) => (
@@ -124,7 +130,6 @@ export default function Footer() {
         </div>
       </footer>
 
-      {/* Scroll to top */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button
@@ -144,4 +149,3 @@ export default function Footer() {
     </>
   )
 }
-

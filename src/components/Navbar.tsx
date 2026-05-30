@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, LogOut, Menu, MessageCircle, Search, User, X } from 'lucide-react'
+import { ChevronRight, LogOut, Menu, Search, User, X } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const navLinks = [
   { label: 'Collections', href: '#collections' },
-  { label: 'Sculptures', href: '#sculptures' },
-  { label: 'Artisans', href: '#artisan' },
-  { label: 'About', href: '#about' },
+  { label: 'Process', href: '#process' },
+  { label: 'Custom Orders', href: '#contact' },
+  { label: 'Studio', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -162,14 +162,11 @@ export default function Navbar() {
               )}
 
               <a
-                href="https://wa.me/919876543210"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#contact"
                 className="hidden lg:flex items-center gap-2 px-4 py-2 font-sans text-[13px] font-semibold tracking-[0.15em] uppercase text-white transition-all duration-300 rounded-sm"
                 style={{ background: '#FFFFFF', color: '#3D0000' }}
               >
-                <MessageCircle size={13} />
-                WhatsApp
+                Request Custom Piece
               </a>
 
               <button
@@ -309,14 +306,12 @@ export default function Navbar() {
                   </button>
                 )}
                 <a
-                  href="https://wa.me/919876543210"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#contact"
+                  onClick={() => setMobileOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 font-sans text-xs font-semibold tracking-[0.15em] uppercase text-white rounded-sm"
                   style={{ background: '#D4AF37' }}
                 >
-                  <MessageCircle size={14} />
-                  Chat on WhatsApp
+                  Request Custom Piece
                 </a>
               </div>
             </motion.nav>

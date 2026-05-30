@@ -1,6 +1,6 @@
-﻿import { useState, useRef, FormEvent } from 'react'
+import { useState, useRef, FormEvent } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, Loader2, MessageCircle } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { apiRequest } from '../lib/api'
 
 type EnquiryType = '' | 'commission' | 'purchase' | 'valuation' | 'wholesale' | 'press'
@@ -90,41 +90,28 @@ export default function Newsletter() {
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.7 }}
       >
-        {/* Left panel â€” dark */}
+        {/* Left panel */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
           style={{ background: '#6B0000' }}
         >
-          <div className="section-label mb-6">Speak with a Curator</div>
           <h2
             className="font-display font-light text-white leading-[1.1] mb-5"
             style={{ fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4vw, 3rem)' }}
           >
-            Commission Your{' '}
-            <span className="font-semibold" style={{ color: '#D4AF37' }}>Piece</span>
+            Have a Project{' '}
+            <span className="font-semibold" style={{ color: '#D4AF37' }}>in Mind?</span>
           </h2>
-          <p className="font-sans leading-relaxed mb-8 max-w-sm" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.55)' }}>
-            Whether you seek a bespoke commission, a specific sculpture, or simply expert guidance
-            on building your collection â€” our curators are here.
+          <p className="font-sans leading-relaxed mb-5 max-w-sm" style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.55)' }}>
+            Tell us what you are thinking. We will tell you how we would make it real.
+          </p>
+          <p className="font-sans leading-relaxed mb-8 max-w-sm" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.38)' }}>
+            Whether you are presenting to investors, seeking regulatory approval, building for a museum,
+            or simply want to hold your vision in your hands, we are ready to begin.
           </p>
 
-          <div className="space-y-3 mb-8">
-            {['Bespoke Commissions', 'Purchase Enquiries', 'Collection Guidance', 'Valuations'].map((item) => (
-              <div key={item} className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#D4AF37' }} />
-                <span className="font-sans text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <a
-            href="https://wa.me/919876543210"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary self-start"
-          >
-            <MessageCircle size={14} />
-            WhatsApp Us
+          <a href="#sculptures" className="btn-primary self-start">
+            Explore the Work
           </a>
 
           <p className="font-sans text-[11px] mt-4 tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.25)' }}>
@@ -132,7 +119,7 @@ export default function Newsletter() {
           </p>
         </div>
 
-        {/* Right panel â€” cyan */}
+        {/* Right panel */}
         <div
           className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16"
           style={{ background: '#D4AF37' }}
@@ -148,13 +135,13 @@ export default function Newsletter() {
                 Message Received
               </h3>
               <p className="font-sans text-sm text-white/75">
-                A curator will contact you within 24 hours.
+                We will be in touch within 24 hours.
               </p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
               <h3 className="font-display font-semibold text-2xl mb-6" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#1C1200' }}>
-                Send an Enquiry
+                Discuss Your Order
               </h3>
 
               {submitError && (
@@ -238,7 +225,7 @@ export default function Newsletter() {
                   onChange={handleChange}
                   disabled={isSubmitting}
                   rows={4}
-                  placeholder="Your message â€” describe what you're looking for..."
+                  placeholder="Share your vision, references, dimensions, or spatial requirements."
                   className="w-full px-4 py-3 font-sans text-sm outline-none resize-none rounded-lg"
                   style={{
                     background: 'rgba(255,255,255,0.2)',
@@ -254,7 +241,7 @@ export default function Newsletter() {
                 disabled={isSubmitting}
                 className="btn-dark w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed rounded-lg"
               >
-                {isSubmitting ? 'Sending...' : 'Send Enquiry'}
+                {isSubmitting ? 'Sending...' : 'Submit Enquiry'}
                 {isSubmitting ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
               </button>
             </form>
@@ -264,4 +251,3 @@ export default function Newsletter() {
     </section>
   )
 }
-

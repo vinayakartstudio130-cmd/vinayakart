@@ -2,10 +2,10 @@
 import { ArrowRight } from 'lucide-react'
 
 const stats = [
-  { number: '12,000+', label: 'Collectors Worldwide' },
-  { number: '500+', label: 'Unique Sculptures' },
-  { number: '25 Yrs', label: 'Heritage Craft' },
-  { number: '4.9 â˜…', label: 'Collector Rating' },
+  { number: '10+', label: 'Years of Studio Practice' },
+  { number: '500+', label: 'Models Delivered' },
+  { number: '20+', label: 'Countries Reached' },
+  { number: '100%', label: 'Customization' },
 ]
 
 const containerVariants = {
@@ -55,7 +55,7 @@ export default function Hero() {
         {/* Overline label */}
         <motion.div variants={itemVariants} className="mb-6 flex justify-center">
           <span className="font-sans text-[11px] font-semibold tracking-[0.3em] uppercase px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.95)', color: '#6B0000' }}>
-            Maharashtra's Finest
+            Pune · India · Delivering Globally
           </span>
         </motion.div>
 
@@ -68,10 +68,10 @@ export default function Hero() {
             fontSize: 'clamp(2.8rem, 7vw, 6.5rem)',
           }}
         >
-          Sculpted in Stone.
+          Timeless Form.
           <br />
           <span className="font-semibold" style={{ color: '#FFFFFF' }}>
-            Eternal in Spirit.
+            Contemporary Precision.
           </span>
         </motion.h1>
 
@@ -81,8 +81,8 @@ export default function Hero() {
           className="font-sans font-light text-white/80 max-w-xl mb-10 leading-relaxed"
           style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.0625rem)' }}
         >
-          Collector-grade Maharashtrian sculptures in stone, brass, terracotta and wood â€”
-          each piece bearing the soul of a master artisan.
+          Precision-crafted scale models and visualization solutions for architects,
+          developers, and institutions across the world. Built by hand. Built to last.
         </motion.p>
 
         {/* CTA buttons */}
@@ -92,7 +92,7 @@ export default function Hero() {
             <ArrowRight size={14} />
           </a>
           <a href="#contact" className="btn-ghost-white">
-            Commission a Piece
+            Commission a Custom Model
           </a>
         </motion.div>
       </motion.div>

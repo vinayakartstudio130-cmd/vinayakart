@@ -7,42 +7,50 @@ interface Collection {
   number: string
   title: string
   subtitle: string
-  pieces: number
+  description: string
   image: string
 }
 
 const collections: Collection[] = [
   {
-    id: 'sacred',
+    id: 'icon',
     number: '01',
-    title: 'Sacred Idols',
-    subtitle: 'Devotional Sculptures',
-    pieces: 84,
+    title: 'The Icon Series',
+    subtitle: 'Sacred Forms. Timeless Presence.',
+    description: 'Handcrafted idols and spiritual sculptures designed for homes, temples, hospitality spaces, and collectors who value artistry beyond ornamentation.',
     image: 'https://images.unsplash.com/photo-1608099269227-82de5da1e4a8?w=600&q=80&fit=crop',
   },
   {
-    id: 'stone',
+    id: 'form',
     number: '02',
-    title: 'Stone Sculptures',
-    subtitle: 'Black Basalt & Sandstone',
-    pieces: 63,
+    title: 'The Form Series',
+    subtitle: 'Architecture You Can Hold.',
+    description: 'Precision-crafted architectural models that transform blueprints into immersive presentation pieces for architects, developers, and institutions.',
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop',
   },
   {
-    id: 'brass',
+    id: 'heritage',
     number: '03',
-    title: 'Brass Works',
-    subtitle: 'Lost-Wax Cast Masterpieces',
-    pieces: 48,
+    title: 'The Heritage Series',
+    subtitle: 'Stories Cast in Form.',
+    description: 'Sculptural pieces inspired by culture, mythology, history, and timeless Indian artistry — created to preserve legacy through craftsmanship.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&q=80&fit=crop',
   },
   {
-    id: 'terracotta',
+    id: 'atelier',
     number: '04',
-    title: 'Terracotta Art',
-    subtitle: 'Earth-fired Traditions',
-    pieces: 57,
+    title: 'The Atelier Series',
+    subtitle: 'Made Around Your Vision.',
+    description: 'Fully bespoke commissions tailored to your imagination — from monumental installations to intimate collector pieces.',
     image: 'https://images.unsplash.com/photo-1583425423885-d9c2cd0b1077?w=600&q=80&fit=crop',
+  },
+  {
+    id: 'micro',
+    number: '05',
+    title: 'The Micro Series',
+    subtitle: 'Small Scale. Exceptional Detail.',
+    description: 'Miniature collectibles and artistic replicas finished with remarkable precision for gifting, display, and curated collections.',
+    image: 'https://images.unsplash.com/photo-1509587584298-0f3620e1a35f?w=600&q=80&fit=crop',
   },
 ]
 
@@ -74,7 +82,7 @@ function CollectionCard({ collection }: { collection: Collection }) {
 
         {/* Number badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="font-sans text-[10px] font-bold tracking-[0.25em] text-white px-2 py-0.5 rounded-full" style={{ background: '#1CB8D2' }}>
+          <span className="font-sans text-[10px] font-bold tracking-[0.25em] text-white px-2 py-0.5 rounded-full" style={{ background: '#D4AF37' }}>
             {collection.number}
           </span>
         </div>
@@ -89,20 +97,20 @@ function CollectionCard({ collection }: { collection: Collection }) {
 
       {/* Card content */}
       <div className="p-5">
-        <h3 className="font-display text-xl font-semibold mb-0.5 group-hover:text-[#1CB8D2] transition-colors duration-300" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#162540' }}>
+        <h3 className="font-display text-xl font-semibold mb-0.5 group-hover:text-[#D4AF37] transition-colors duration-300" style={{ fontFamily: 'Montserrat Alternates, sans-serif', color: '#162540' }}>
           {collection.title}
         </h3>
-        <p className="font-sans text-[11px] tracking-[0.12em] uppercase mb-3" style={{ color: 'rgba(22,37,64,0.5)' }}>
+        <p className="font-sans text-[11px] tracking-[0.12em] uppercase mb-2" style={{ color: 'rgba(22,37,64,0.5)' }}>
           {collection.subtitle}
         </p>
-        <div className="flex items-center justify-between">
-          <span className="font-sans text-[12px] font-semibold" style={{ color: '#1CB8D2' }}>
-            {collection.pieces} pieces
-          </span>
+        <p className="font-sans text-[12px] leading-relaxed mb-3" style={{ color: 'rgba(22,37,64,0.55)' }}>
+          {collection.description}
+        </p>
+        <div className="flex items-center justify-end">
           <ArrowRight
             size={14}
             className="-translate-x-2 group-hover:translate-x-0 opacity-0 group-hover:opacity-100 transition-all duration-300"
-            style={{ color: '#1CB8D2' }}
+            style={{ color: '#D4AF37' }}
           />
         </div>
       </div>
@@ -130,7 +138,7 @@ export default function Collections() {
           transition={{ duration: 0.7 }}
         >
           <div>
-            <div className="section-label-dark mb-4">Curated by Heritage</div>
+            <div className="section-label-dark mb-4">Curated Creations</div>
             <h2
               className="font-display font-light leading-[1.1]"
               style={{
@@ -139,22 +147,25 @@ export default function Collections() {
                 color: '#162540',
               }}
             >
-              Our <span className="font-semibold" style={{ color: '#1CB8D2' }}>Collections</span>
+              Our <span className="font-semibold" style={{ color: '#D4AF37' }}>Collections</span>
             </h2>
+            <p className="mt-3 font-sans text-sm leading-relaxed max-w-md" style={{ color: 'rgba(22,37,64,0.55)' }}>
+              Each piece is designed for a specific purpose. All are made to the same standard, uncompromising.
+            </p>
           </div>
           <a
-            href="#sculptures"
+            href="#contact"
             className="flex items-center gap-2 font-sans text-[11px] font-semibold tracking-[0.18em] uppercase transition-colors self-start md:self-auto group"
-            style={{ color: '#1CB8D2' }}
+            style={{ color: '#D4AF37' }}
           >
-            View All Pieces
+            Commission a Custom Piece
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
 
         {/* Cards */}
         <motion.div
-          className="flex md:grid md:grid-cols-4 gap-5 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0"
+          className="flex md:grid md:grid-cols-5 gap-5 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0"
           style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
           variants={containerVariants}
           initial="hidden"

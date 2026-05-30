@@ -37,17 +37,17 @@ export default function Gallery() {
               className="font-sans text-[10px] font-semibold tracking-[0.3em] uppercase px-4 py-1.5 rounded-full"
               style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37' }}
             >
-              Handcrafted Masterpieces
+              Selected Works
             </span>
           </div>
           <h2
             className="font-display font-light leading-tight"
             style={{ color: '#1C1200', fontFamily: 'Montserrat Alternates, sans-serif', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)' }}
           >
-            Our <span className="font-semibold" style={{ color: '#D4AF37' }}>Gallery</span>
+            Selected <span className="font-semibold" style={{ color: '#D4AF37' }}>Works</span>
           </h2>
           <p className="mt-4 font-sans max-w-lg mx-auto text-sm leading-relaxed" style={{ color: '#7A6040' }}>
-            Every piece tells a story — sculpted by masters, steeped in Maharashtra's living heritage.
+            A curated selection of sculptural objects, architectural forms, and commissioned studies developed across residential, hospitality, cultural, and design environments.
           </p>
         </motion.div>
 

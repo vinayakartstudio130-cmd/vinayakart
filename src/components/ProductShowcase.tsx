@@ -1,6 +1,6 @@
 ﻿import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { AlertCircle, CheckCircle, Copy, Eye, Heart, Loader2, ShoppingBag, X } from 'lucide-react'
+import { AlertCircle, CheckCircle, ChevronLeft, ChevronRight, Copy, Eye, Heart, Loader2, ShoppingBag, X } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { apiRequest, getUserToken } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
@@ -17,6 +17,9 @@ interface Product {
   badgeColor: 'gold' | 'stone' | 'red'
   category: string
   image: string
+  imageFront?: string
+  imageBack?: string
+  imageSide?: string
   dimensions: string
   stock: number
 }
@@ -161,6 +164,19 @@ interface ProductCardProps {
 
 function ProductCard({ product, onBuy, currency }: ProductCardProps) {
   const [wishlisted, setWishlisted] = useState(false)
+  const [activeImg, setActiveImg] = useState(0)
+
+  const images = [product.image, product.imageFront, product.imageBack, product.imageSide].filter(Boolean) as string[]
+  const hasMany = images.length > 1
+
+  const prevImg = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setActiveImg((i) => (i === 0 ? images.length - 1 : i - 1))
+  }
+  const nextImg = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setActiveImg((i) => (i === images.length - 1 ? 0 : i + 1))
+  }
 
   return (
     <motion.article
@@ -176,10 +192,12 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
       }}
     >
       <div className="relative overflow-hidden aspect-[4/5]">
+        {/* Carousel images */}
         <img
-          src={product.image}
+          key={activeImg}
+          src={images[activeImg]}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="w-full h-full object-cover transition-opacity duration-400"
           loading="lazy"
           style={{ filter: 'brightness(0.8) contrast(1.05)' }}
         />
@@ -207,6 +225,47 @@ function ProductCard({ product, onBuy, currency }: ProductCardProps) {
             className={wishlisted ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-white/60'}
           />
         </button>
+
+        {/* Prev / Next arrows */}
+        {hasMany && (
+          <>
+            <button
+              onClick={prevImg}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              style={{ background: 'rgba(0,0,0,0.55)' }}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={14} className="text-white" />
+            </button>
+            <button
+              onClick={nextImg}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              style={{ background: 'rgba(0,0,0,0.55)' }}
+              aria-label="Next image"
+            >
+              <ChevronRight size={14} className="text-white" />
+            </button>
+          </>
+        )}
+
+        {/* Dot indicators */}
+        {hasMany && (
+          <div className="absolute bottom-12 left-0 right-0 z-20 flex items-center justify-center gap-1.5">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => { e.stopPropagation(); setActiveImg(i) }}
+                aria-label={`Image ${i + 1}`}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === activeImg ? '18px' : '6px',
+                  height: '6px',
+                  background: i === activeImg ? '#D4AF37' : 'rgba(255,255,255,0.45)',
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         <div
           className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex items-center justify-between px-4 py-3 z-10"

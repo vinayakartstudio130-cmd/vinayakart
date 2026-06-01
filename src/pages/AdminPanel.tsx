@@ -694,27 +694,26 @@ export default function AdminPanel() {
                     required={['name', 'material', 'price'].includes(key)}
                   />
                 ))}
-                {collections.length > 0 ? (
-                  <select
-                    value={productForm.category}
-                    onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
-                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                    required
-                  >
-                    <option value="">Select collection *</option>
-                    {collections.map((c) => (
-                      <option key={c._id} value={c.slug}>{c.name}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    value={productForm.category}
-                    onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
-                    placeholder="Category"
-                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                    required
-                  />
-                )}
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#F5F0E8]/40">Collection *</p>
+                  {collections.length > 0 ? (
+                    <select
+                      value={productForm.category}
+                      onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
+                      className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                      required
+                    >
+                      <option value="">— Select a collection —</option>
+                      {collections.map((c) => (
+                        <option key={c._id} value={c.slug}>{c.name}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="w-full border border-[#D4AF37]/10 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/30">
+                      No collections yet — create one in the Collections tab first.
+                    </div>
+                  )}
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   {(
                     [

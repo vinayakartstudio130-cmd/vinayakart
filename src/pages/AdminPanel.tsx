@@ -107,7 +107,7 @@ const emptyCollection = {
 const emptyProduct = {
   name: '',
   material: '',
-  category: 'stone',
+  category: '',
   price: '',
   dimensions: '',
   image: '',
@@ -674,6 +674,45 @@ export default function AdminPanel() {
                 {[
                   ['name', 'Product name'],
                   ['material', 'Material'],
+                ].map(([key, label]) => (
+                  <input
+                    key={key}
+                    value={productForm[key as keyof typeof productForm]}
+                    onChange={(event) =>
+                      setProductForm((previous) => ({
+                        ...previous,
+                        [key]: event.target.value,
+                      }))
+                    }
+                    placeholder={label}
+                    className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                    required
+                  />
+                ))}
+
+                {/* Collection selector */}
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#D4AF37]/70 font-semibold">Collection *</p>
+                  {collections.length > 0 ? (
+                    <select
+                      value={productForm.category}
+                      onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
+                      className="w-full border border-[#D4AF37]/40 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
+                      required
+                    >
+                      <option value="">— Select a collection —</option>
+                      {collections.map((c) => (
+                        <option key={c._id} value={c.slug}>{c.name}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="w-full border border-dashed border-[#D4AF37]/20 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/30">
+                      No collections yet — go to the <strong className="text-[#D4AF37]/50">Collections</strong> tab and create one first.
+                    </div>
+                  )}
+                </div>
+
+                {[
                   ['price', 'Price'],
                   ['dimensions', 'Dimensions'],
                   ['badge', 'Badge'],
@@ -691,29 +730,9 @@ export default function AdminPanel() {
                     placeholder={label}
                     type={key === 'price' || key === 'stock' ? 'number' : 'text'}
                     className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                    required={['name', 'material', 'price'].includes(key)}
+                    required={key === 'price'}
                   />
                 ))}
-                <div className="space-y-1">
-                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#F5F0E8]/40">Collection *</p>
-                  {collections.length > 0 ? (
-                    <select
-                      value={productForm.category}
-                      onChange={(e) => setProductForm((prev) => ({ ...prev, category: e.target.value }))}
-                      className="w-full border border-[#D4AF37]/15 bg-[#0a0a0a] px-4 py-3 text-sm outline-none"
-                      required
-                    >
-                      <option value="">— Select a collection —</option>
-                      {collections.map((c) => (
-                        <option key={c._id} value={c.slug}>{c.name}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <div className="w-full border border-[#D4AF37]/10 bg-[#0a0a0a] px-4 py-3 text-sm text-[#F5F0E8]/30">
-                      No collections yet — create one in the Collections tab first.
-                    </div>
-                  )}
-                </div>
                 <div className="grid grid-cols-2 gap-2">
                   {(
                     [
